@@ -1,0 +1,737 @@
+{
+    "name": "ServiceNow",
+    "label": "[[label]]",
+    "description": "[[description]]",
+    "group": "com.automationanywhere",
+    "artifactName": "ServiceNow",
+    "packageVersion": "1.0.0-20210817-093603",
+    "codeVersion": "1.0.0-20210817-093603",
+    "author": "",
+    "commands": [
+        {
+            "name": "EndSnowSession",
+            "label": "End Session",
+            "description": "Session End",
+            "nodeLabel": "End Session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.Ab_EndSessionCommand",
+            "groupLabel": "Admin",
+            "icon": "snow.svg",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "startSnowSession",
+            "label": "Start Session",
+            "description": "Starts Session with OAuth Credentials",
+            "nodeLabel": "Start Session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.A_StartSessionCommand",
+            "groupLabel": "Admin",
+            "icon": "snow.svg",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "name",
+                    "label": "Start Session",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "url",
+                    "label": "ServiceNow URL",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "clientId",
+                    "label": "Client ID",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "clientSecret",
+                    "label": "Client Secret",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "username",
+                    "label": "User Name",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "password",
+                    "label": "Password",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "CloseTask",
+            "label": "Close Task",
+            "description": "Closes a Todoist task",
+            "nodeLabel": "Closes task in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.CloseTaskCommand",
+            "groupLabel": "Tasks",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "taskId",
+                    "label": "Task ID",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "CreateProject",
+            "label": "Create Project",
+            "description": "Creates a new Todoist project",
+            "nodeLabel": "Create a new project in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.CreateProjectCommand",
+            "groupLabel": "Projects",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "returnType": "DICTIONARY",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a dictionary variable",
+            "returnRequired": false,
+            "returnDescription": "Outputs ID and URL with keys 'id' and 'url'",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "projectName",
+                    "label": "Project Name",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "parentId",
+                    "label": "Parent Project ID",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "favorite",
+                    "label": "Mark as favorite",
+                    "type": "BOOLEAN",
+                    "defaultValue": {
+                        "boolean": false,
+                        "type": "BOOLEAN"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "CreateTask",
+            "label": "Create Task",
+            "description": "Creates a new Todoist task",
+            "nodeLabel": "Create a new task in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.CreateTaskCommand",
+            "groupLabel": "Tasks",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "returnType": "DICTIONARY",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a dictionary variable",
+            "returnRequired": false,
+            "returnDescription": "Outputs the id and url of the task with keys 'id' and 'url'",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "taskName",
+                    "label": "Task Name",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "projectId",
+                    "label": "Project ID",
+                    "description": "e.g. 2270452658",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "dueDate",
+                    "label": "Due Date",
+                    "description": "input format: YYYY-MM-DD",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "description": "Enter priority level 1, 2, 3 or 4",
+                    "type": "SELECT",
+                    "defaultValue": {
+                        "string": "4",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "1",
+                            "value": "1"
+                        },
+                        {
+                            "label": "2",
+                            "value": "2"
+                        },
+                        {
+                            "label": "3",
+                            "value": "3"
+                        },
+                        {
+                            "label": "4",
+                            "value": "4"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "DeleteProject",
+            "label": "Delete Project",
+            "description": "Deletes a Todoist project",
+            "nodeLabel": "Deletes project in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.DeleteProjectCommand",
+            "groupLabel": "Projects",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "projectId",
+                    "label": "Project ID",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "DeleteTask",
+            "label": "Delete Task",
+            "description": "Deletes a Todoist task",
+            "nodeLabel": "Deletes task in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.DeleteTaskCommand",
+            "groupLabel": "Tasks",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "taskId",
+                    "label": "Task ID",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GetActiveTasks",
+            "label": "Get Tasks",
+            "description": "Gets list of Todoist active tasks",
+            "nodeLabel": "Get list of tasks in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.GetActiveTasksCommand",
+            "groupLabel": "Tasks",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "returnType": "TABLE",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a table variable",
+            "returnRequired": true,
+            "returnDescription": "Outputs table with task id, name, priority, due date and url",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GetRecord",
+            "label": "Get Record",
+            "description": "Gets a record from the input table and sys_id",
+            "nodeLabel": "Get a ServiceNow record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.GetRecordCommand",
+            "icon": "snow.svg",
+            "comment": true,
+            "returnType": "DICTIONARY",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a dictionary variable",
+            "returnRequired": false,
+            "returnDescription": "Available keys: short description, severity",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_id",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "values",
+                    "label": "Values to return in dictionary",
+                    "description": "e.g. name: incident description, value: short_description",
+                    "type": "ENTRYLIST",
+                    "rules": [
+                        {
+                            "name": "ENTRYLIST_ADD_LABEL",
+                            "value": "Add entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_EMPTY_LABEL",
+                            "value": "No values to return"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_LABEL",
+                            "value": "Provide entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_UNIQUE",
+                            "value": "NAME"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "name": "NAME",
+                            "label": "Dictionary variable key"
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value of JSON dictionary key from Servicenow Table API response"
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "NAME",
+                            "label": "Name",
+                            "type": "TEXT",
+                            "rules": [
+                                {
+                                    "name": "NOT_EMPTY"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value",
+                            "type": "TEXT"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UpdateProject",
+            "label": "Update Project",
+            "description": "Updates a Todoist project",
+            "nodeLabel": "Update a project in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.UpdateProjectCommand",
+            "groupLabel": "Projects",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "projectId",
+                    "label": "Project ID",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "projectName",
+                    "label": "Project Name",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "favorite",
+                    "label": "Mark as favorite",
+                    "type": "BOOLEAN",
+                    "defaultValue": {
+                        "boolean": false,
+                        "type": "BOOLEAN"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UpdateTask",
+            "label": "Update Task",
+            "description": "Updates a Todoist task",
+            "nodeLabel": "Update task in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.UpdateTaskCommand",
+            "groupLabel": "Tasks",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "taskId",
+                    "label": "Task ID",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "nameGroup",
+                    "label": "Parameters to Update",
+                    "type": "GROUP",
+                    "attributes": [
+                        {
+                            "name": "taskName",
+                            "label": "Task Name",
+                            "type": "TEXT",
+                            "rules": [
+                                {
+                                    "name": "NOT_EMPTY"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "dueDate",
+                            "label": "Due Date",
+                            "description": "input format: YYYY-MM-DD",
+                            "type": "TEXT"
+                        }
+                    ]
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "description": "Enter priority level 1, 2, 3 or 4",
+                    "type": "SELECT",
+                    "defaultValue": {
+                        "string": "4",
+                        "type": "STRING"
+                    },
+                    "options": [
+                        {
+                            "label": "1",
+                            "value": "1"
+                        },
+                        {
+                            "label": "2",
+                            "value": "2"
+                        },
+                        {
+                            "label": "3",
+                            "value": "3"
+                        },
+                        {
+                            "label": "4",
+                            "value": "4"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "triggers": [
+        {
+            "name": "todoisttasktrigger",
+            "label": "Task Trigger",
+            "description": "Task Trigger",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.TaskTriggerTrigger",
+            "icon": "todo.svg",
+            "textColor": "#7B848B",
+            "backgroundColor": "#a6a6a6",
+            "returnType": "RECORD",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "",
+            "returnRequired": false,
+            "returnDescription": "Available keys: triggerType, id",
+            "returnName": "TriggerData",
+            "attributes": [
+                {
+                    "name": "token",
+                    "label": "API token",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "interval",
+                    "label": "Please provide the interval to trigger in seconds",
+                    "type": "NUMBER",
+                    "defaultValue": {
+                        "number": "120",
+                        "type": "NUMBER"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        },
+                        {
+                            "name": "GREATER_THAN",
+                            "value": "0"
+                        },
+                        {
+                            "name": "NUMBER_INTEGER"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
