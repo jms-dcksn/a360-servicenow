@@ -13,6 +13,7 @@ import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListEm
 import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListEntryUnique;
 import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListLabel;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
+import com.automationanywhere.commandsdk.model.AttributeType;
 import com.automationanywhere.commandsdk.model.DataType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,8 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.automationanywhere.commandsdk.model.AttributeType.ENTRYLIST;
-import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
+import static com.automationanywhere.commandsdk.model.AttributeType.*;
 import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
 /**
@@ -72,7 +72,8 @@ public class GetRecords {
                     @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "Servicenow response key")),
             })
             //Label you see at the top of the control
-            @Pkg(label = "Values to return for each dictionary in list", description = "e.g. name: incident description, value: short_description")
+            @Pkg(label = "Values to return for each dictionary in list",
+                    description = "e.g. name: incident description, value: short_description")
             //Header of the entry form
             @EntryListLabel(value = "Provide entry")
             //Button label which displays the entry form
@@ -81,15 +82,20 @@ public class GetRecords {
             @EntryListEntryUnique(value = "NAME")
             //Message to display in table when no entries are present.
             @EntryListEmptyLabel(value = "No values to return")
-                    List<Value> values
+                    List<Value> values,
+            @Idx(index = "4", type = AttributeType.NUMBER) @Pkg(label = "Limit", default_value_type = DataType.NUMBER,
+                    description = "Limits the total number of records returned")
+            Double limit
     ) throws IOException, ParseException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
+        Integer iLimit = limit.intValue();
+        String sLimit = iLimit.toString();
         String response = "";
         JSONArray resultArray;
         try {
-            response = ServiceNowActions.getRecords(url, table, token, values);
+            response = ServiceNowActions.getRecords(url, table, token, values, sLimit);
             Object obj = new JSONParser().parse(response);
             JSONObject json_resp = (JSONObject) obj;
             resultArray = (JSONArray) json_resp.get("result");
@@ -113,8 +119,8 @@ public class GetRecords {
                     } catch (Exception e) {
                         throw new BotCommandException("The ServiceNow record returned doesn't contain one of the keys entered in the values. Please check the values entered. " + e);
                     }
-                    dictionaryObjects.add(new DictionaryValue(ResMap));
                 }
+                dictionaryObjects.add(new DictionaryValue(ResMap));
             }
         }
 

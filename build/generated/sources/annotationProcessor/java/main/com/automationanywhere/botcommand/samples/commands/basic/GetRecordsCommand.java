@@ -9,6 +9,7 @@ import com.automationanywhere.commandsdk.i18n.Messages;
 import com.automationanywhere.commandsdk.i18n.MessagesFactory;
 import java.lang.ClassCastException;
 import java.lang.Deprecated;
+import java.lang.Double;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.Throwable;
@@ -101,9 +102,16 @@ public final class GetRecordsCommand implements BotCommand {
 
 
     }
+    if(parameters.containsKey("limit") && parameters.get("limit") != null && parameters.get("limit").get() != null) {
+      convertedParameters.put("limit", parameters.get("limit").get());
+      if(convertedParameters.get("limit") !=null && !(convertedParameters.get("limit") instanceof Double)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","limit", "Double", parameters.get("limit").get().getClass().getSimpleName()));
+      }
+    }
+
     command.setSessionMap(sessionMap);
     try {
-      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(List<Value>)convertedParameters.get("values")));
+      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(List<Value>)convertedParameters.get("values"),(Double)convertedParameters.get("limit")));
       return logger.traceExit(result);
     }
     catch (ClassCastException e) {

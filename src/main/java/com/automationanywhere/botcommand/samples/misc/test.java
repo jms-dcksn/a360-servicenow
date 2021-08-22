@@ -28,6 +28,9 @@ public class test {
         String password = "AYdIg7w1dXKv";
         String name = "description";
         String value = "short_description";
+        Double limit = 5.0;
+        Integer iLimit = limit.intValue();
+        String sLimit = iLimit.toString();
         Map<String, Value> map = new HashMap<>();
         map.put("NAME", new StringValue(name));
         list.add(new DictionaryValue(map));
@@ -43,7 +46,7 @@ public class test {
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
 
-        String records = ServiceNowActions.getRecords(url, "incident", token, list);
+        String records = ServiceNowActions.getRecords(url, "incident", token, list, sLimit);
         /*Object object = new JSONParser().parse(record);
         JSONObject json_resp = (JSONObject) object;
         JSONObject result = (JSONObject) json_resp.get("result");

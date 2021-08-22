@@ -47,9 +47,9 @@ public class ServiceNowActions {
             return response;
     }
 
-    public static String getRecords(String url, String table, String token, List<Value> fields){
+    public static String getRecords(String url, String table, String token, List<Value> fields, String limit){
         url = url + "api/now/table/" + table + "?sysparm_fields=";
-
+        //add fields as query params
         if(fields!=null && fields.size()>0){
             for (Value element : fields){
                 Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
@@ -61,6 +61,8 @@ public class ServiceNowActions {
             //remove last comma
             url = url.substring(0, url.length()-3);
         }
+
+        url = url + "&sysparm_limit=" + limit; //add record limit as query param
 
         String method = "GET";
         String auth = "Bearer " + token;
@@ -76,6 +78,7 @@ public class ServiceNowActions {
         }
         return response;
     }
+
 
     public static JSONObject CreateProject(String token, String projectName, Long lParentId, Boolean favorite) throws ParseException {
 
