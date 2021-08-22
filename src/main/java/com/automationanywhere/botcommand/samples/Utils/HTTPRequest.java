@@ -72,7 +72,7 @@ public class HTTPRequest {
         HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Accept", "*/*");
-        connection.setRequestProperty("Content-Type", "x-www-form-urlencoded");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", auth);
         connection.setDoOutput(true);
         OutputStream outStream = connection.getOutputStream();
@@ -83,7 +83,7 @@ public class HTTPRequest {
         outStream.close();
         connection.connect();
         int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204) {
+        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 201) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
             StringBuffer response = new StringBuffer();

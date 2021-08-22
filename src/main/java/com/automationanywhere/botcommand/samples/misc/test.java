@@ -46,12 +46,12 @@ public class test {
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
 
-        String records = ServiceNowActions.getRecords(url, "incident", token, list, sLimit);
-        /*Object object = new JSONParser().parse(record);
+        String recordCreated = ServiceNowActions.insertRecord(url, "incident", token, list);
+        Object object = new JSONParser().parse(recordCreated);
         JSONObject json_resp = (JSONObject) object;
         JSONObject result = (JSONObject) json_resp.get("result");
-        String shortdesc = result.get("short_description").toString();*/
-        System.out.println(records);
+        String sys_id = result.get("sys_id").toString();
+        System.out.println(sys_id);
 
         //System.out.println(json_resp);
 

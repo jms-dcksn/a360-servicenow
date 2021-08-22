@@ -39,7 +39,7 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
         name = "GetRecords",
         label = "Get Multiple Records",
         node_label = "Get list of records from Servicenow in {{sessionName}}",
-        //group_label = "Projects",
+        group_label = "Records",
         description = "Gets a list of records from the specified table",
         icon = "snow.svg",
         comment = true ,
