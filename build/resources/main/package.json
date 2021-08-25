@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210822-090235",
-    "codeVersion": "1.0.0-20210822-090235",
+    "packageVersion": "1.0.0-20210825-135804",
+    "codeVersion": "1.0.0-20210825-135804",
     "author": "",
     "commands": [
         {
@@ -122,6 +122,7 @@
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
             "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.GetRecordCommand",
+            "groupLabel": "Records",
             "icon": "snow.svg",
             "comment": true,
             "returnType": "DICTIONARY",
@@ -225,6 +226,7 @@
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
             "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.GetRecordsCommand",
+            "groupLabel": "Records",
             "icon": "snow.svg",
             "comment": true,
             "returnType": "LIST",
@@ -311,7 +313,102 @@
                 {
                     "name": "limit",
                     "label": "Limit",
+                    "description": "Limits the total number of records returned",
                     "type": "NUMBER"
+                }
+            ]
+        },
+        {
+            "name": "InsertRecord",
+            "label": "Add Record",
+            "description": "Adds a record to the specified table",
+            "nodeLabel": "Add a ServiceNow record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.InsertRecordCommand",
+            "groupLabel": "Records",
+            "icon": "snow.svg",
+            "comment": true,
+            "returnType": "STRING",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a string",
+            "returnRequired": false,
+            "returnDescription": "Returns sys_id in a string variable",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "values",
+                    "label": "Values to include in record",
+                    "description": "e.g. key: short_description, value: my computer crashed",
+                    "type": "ENTRYLIST",
+                    "rules": [
+                        {
+                            "name": "ENTRYLIST_ADD_LABEL",
+                            "value": "Add entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_EMPTY_LABEL",
+                            "value": "No values to return"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_LABEL",
+                            "value": "Provide entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_UNIQUE",
+                            "value": "NAME"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "name": "NAME",
+                            "label": "Servicenow key"
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value"
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "NAME",
+                            "label": "Name",
+                            "type": "TEXT",
+                            "rules": [
+                                {
+                                    "name": "NOT_EMPTY"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value",
+                            "type": "TEXT"
+                        }
+                    ]
                 }
             ]
         }

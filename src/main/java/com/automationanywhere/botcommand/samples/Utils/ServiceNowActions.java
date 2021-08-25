@@ -78,7 +78,7 @@ public class ServiceNowActions {
     }
 
     public static String insertRecord(String url, String table, String token, List<Value> fields){
-        url = url + "api/now/table/" + table;
+        url = url + "api/now/table/" + table + "?sysparm_fields=sys_id";
         JSONObject jsonBody = new JSONObject();
 
         if(fields!=null && fields.size()>0){
@@ -91,8 +91,6 @@ public class ServiceNowActions {
                 }
             }
         }
-
-        String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
         try {
@@ -107,4 +105,23 @@ public class ServiceNowActions {
         return response;
     }
 
+    public static String deleteRecord(String url, String table, String token, String sys_id){
+        url = url + "api/now/table/" + table + "/" + sys_id;
+        //JSONObject jsonBody = new JSONObject();
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.Request(url, "DELETE", auth);
+            if (response.contains("An error occurred")) {
+                throw new BotCommandException(response);
+            }
+        }
+        catch(Exception e){
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+
+        return "Record deleted";
+
+        //return response;
+    }
 }

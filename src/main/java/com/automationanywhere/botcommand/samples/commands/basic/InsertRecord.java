@@ -79,7 +79,7 @@ public class InsertRecord {
             //Message to display in table when no entries are present.
             @EntryListEmptyLabel(value = "No values to return")
                     List<Value> values
-    ) throws IOException, ParseException {
+    ) {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
