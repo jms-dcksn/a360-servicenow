@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210825-135804",
-    "codeVersion": "1.0.0-20210825-135804",
+    "packageVersion": "1.0.0-20210831-141236",
+    "codeVersion": "1.0.0-20210831-141236",
     "author": "",
     "commands": [
         {
@@ -28,6 +28,69 @@
                         "string": "Default",
                         "type": "STRING"
                     },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "AddAttachment",
+            "label": "Add Attachment",
+            "description": "Adds an attachment to the specified record",
+            "nodeLabel": "Add an attachment to a record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.AddAttachmentCommand",
+            "groupLabel": "Attachments",
+            "icon": "snow.svg",
+            "comment": true,
+            "returnType": "STRING",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a string",
+            "returnRequired": false,
+            "returnDescription": "Returns sys_id of the attachment in a string variable",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_Id",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "filePath",
+                    "label": "File to upload as attachment",
+                    "type": "FILE",
                     "rules": [
                         {
                             "name": "NOT_EMPTY"
@@ -106,6 +169,104 @@
                     "name": "password",
                     "label": "Password",
                     "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "DeleteRecord",
+            "label": "Delete Record",
+            "description": "Deletes a record to the specified table",
+            "nodeLabel": "Delete a ServiceNow record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.DeleteRecordCommand",
+            "groupLabel": "Records",
+            "icon": "snow.svg",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "sys_id",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GetAttachment",
+            "label": "Get Attachment",
+            "description": "Downloads an attachment to the specified record",
+            "nodeLabel": "Downloads an attachment to a record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.GetAttachmentCommand",
+            "groupLabel": "Attachments",
+            "icon": "snow.svg",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_Id",
+                    "description": "Enter sys_id for the attachment",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "filePath",
+                    "label": "Location and name to save attachment",
+                    "description": "e.g. C:/Users/../Pictures/incident-screenshot.png",
+                    "type": "FILE",
                     "rules": [
                         {
                             "name": "NOT_EMPTY"
@@ -362,6 +523,110 @@
                 {
                     "name": "values",
                     "label": "Values to include in record",
+                    "description": "e.g. key: short_description, value: my computer crashed",
+                    "type": "ENTRYLIST",
+                    "rules": [
+                        {
+                            "name": "ENTRYLIST_ADD_LABEL",
+                            "value": "Add entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_EMPTY_LABEL",
+                            "value": "No values to return"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_LABEL",
+                            "value": "Provide entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_UNIQUE",
+                            "value": "NAME"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "name": "NAME",
+                            "label": "Servicenow key"
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value"
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "NAME",
+                            "label": "Name",
+                            "type": "TEXT",
+                            "rules": [
+                                {
+                                    "name": "NOT_EMPTY"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value",
+                            "type": "TEXT"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UpdateRecord",
+            "label": "Update a Record",
+            "description": "Updates a record to the specified table",
+            "nodeLabel": "Modify a Servicenow record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.UpdateRecordCommand",
+            "groupLabel": "Records",
+            "icon": "snow.svg",
+            "comment": true,
+            "returnType": "STRING",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a string",
+            "returnRequired": false,
+            "returnDescription": "Returns sys_id in a string variable",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_Id",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "values",
+                    "label": "Values to update in record",
                     "description": "e.g. key: short_description, value: my computer crashed",
                     "type": "ENTRYLIST",
                     "rules": [

@@ -3,6 +3,7 @@ package com.automationanywhere.botcommand.samples.misc;
 import com.automationanywhere.botcommand.data.Value;
 import com.automationanywhere.botcommand.data.impl.DictionaryValue;
 import com.automationanywhere.botcommand.data.impl.StringValue;
+import com.automationanywhere.botcommand.exception.BotCommandException;
 import com.automationanywhere.botcommand.samples.Utils.HTTPRequest;
 import com.automationanywhere.botcommand.samples.Utils.ServiceNowActions;
 import org.json.simple.JSONObject;
@@ -28,7 +29,8 @@ public class test {
         String password = "AYdIg7w1dXKv";
         String name = "short_description";
         String value = "Why is my computer broken";
-        String sys_id = "1c741bd70b2322007518478d83673af3";
+        String sys_id = "1b2aca391b1230104b7a0f26624bcb3e";
+        String filePath = "C:\\Users\\jamesdickson\\Pictures\\thumbnail2.png";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
         //String sLimit = iLimit.toString();
@@ -46,13 +48,23 @@ public class test {
         Object obj = new JSONParser().parse(response);
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
+        String errorMessage = "";
+        JSONObject result = null;
 
-        String recordCreated = ServiceNowActions.updateRecord(url, "incident", sys_id, token, list);
-        //Object object = new JSONParser().parse(recordCreated);
-        //JSONObject json_resp = (JSONObject) object;
-        //JSONObject result = (JSONObject) json_resp.get("result");
-        //String sys_id = result.get("sys_id").toString();
-        System.out.println(recordCreated);
+
+            ServiceNowActions.downloadAttachment(url, token, sys_id, filePath);
+            /*Object object = new JSONParser().parse(recordCreated);
+            JSONObject json_resp = (JSONObject) object;
+            if (json_resp.containsKey("error")) {
+                JSONObject errorObject =  (JSONObject) json_resp.get("error");
+                errorMessage = errorObject.get("message").toString() + ", details: " + errorObject.get("detail").toString();
+                throw new BotCommandException("ServiceNow did not find the record at the specific sys_id. " + errorMessage);
+            }
+            result = (JSONObject) json_resp.get("result");
+
+
+        String sys_id_result = result.get("sys_id").toString();
+        System.out.println(sys_id_result);*/
 
         //String response32 = ServiceNowActions.deleteRecord(url, "incident", token, "jibbersih");
 

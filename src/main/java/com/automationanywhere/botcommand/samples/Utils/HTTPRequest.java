@@ -117,10 +117,29 @@ public class HTTPRequest {
                 .method("POST", body)
                 .addHeader("Authorization", auth)
                 //.addHeader("Content-Type", "multipart/form-data")
-                .addHeader("Cookie", "b=bqjwz6qwia1zsqok1ring9va3")
+                //.addHeader("Cookie", "b=bqjwz6qwia1zsqok1ring9va3")
                 .build();
         Response response = client.newCall(request).execute();
 
         return response.body().string();
+    }
+
+    public static void getFile(String url, String auth, String path) throws IOException{
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+        HttpGet request = new HttpGet(url);
+
+        request.addHeader("Accept", "*/*");
+        request.addHeader("Authorization", auth);
+        request.addHeader("Content-Type", "application/json");
+        try (CloseableHttpResponse response =  httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                try (FileOutputStream outstream = new FileOutputStream(path)) {
+                    entity.writeTo(outstream);
+                }
+            }
+        }
+
     }
 }

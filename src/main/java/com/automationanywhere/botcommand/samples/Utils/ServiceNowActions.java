@@ -157,13 +157,23 @@ public class ServiceNowActions {
         String response = "";
         try {
             response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
         }
         catch(Exception e){
             throw new BotCommandException("Something went wrong with the request. Please try again." + response);
         }
         return response;
+    }
+
+    public static void downloadAttachment(String url, String token, String sys_id, String filePath){
+        url = url + "api/now/attachment/" + sys_id + "/file";
+        //JSONObject jsonBody = new JSONObject();
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            HTTPRequest.getFile(url, auth, filePath);
+        }
+        catch(Exception e) {
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
     }
 }

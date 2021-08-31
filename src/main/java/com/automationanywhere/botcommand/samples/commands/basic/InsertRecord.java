@@ -49,12 +49,12 @@ public class InsertRecord {
     @Sessions
     private Map<String, Object> sessionMap;
 
-    @Idx(index = "4.3", type = TEXT, name="NAME")
+    @Idx(index = "3.3", type = TEXT, name="NAME")
     @Pkg(label = "Name", default_value_type = DataType.STRING)
     @NotEmpty
     private String name;
 
-    @Idx(index = "4.4", type = TEXT, name="VALUE")
+    @Idx(index = "3.4", type = TEXT, name="VALUE")
     @Pkg(label = "Value", default_value_type = DataType.STRING)
     private String value;
 
@@ -64,9 +64,9 @@ public class InsertRecord {
             @NotEmpty String sessionName,
             @Idx(index = "2", type = TEXT) @Pkg(label = "Table", default_value_type = STRING)
             @NotEmpty String table,
-            @Idx(index = "4", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "Servicenow key")),
-                    @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "Value")),
+            @Idx(index = "3", type = ENTRYLIST, options = {
+                    @Idx.Option(index = "3.1", pkg = @Pkg(title = "NAME", label = "Servicenow key")),
+                    @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "Value")),
             })
             //Label you see at the top of the control
             @Pkg(label = "Values to include in record", description = "e.g. key: short_description, value: my computer crashed")
