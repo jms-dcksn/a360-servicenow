@@ -94,7 +94,35 @@ public class ServiceNowActions {
         String auth = "Bearer " + token;
         String response = "";
         try {
-            response = HTTPRequest.POST(auth, url, jsonBody.toString());
+            response = HTTPRequest.SEND(auth, url, "POST", jsonBody.toString());
+            if (response.contains("An error occurred")) {
+                throw new BotCommandException(response);
+            }
+        }
+        catch(Exception e){
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
+    }
+
+    public static String updateRecord(String url, String table, String sys_id, String token, List<Value> fields){
+        url = url + "api/now/table/" + table + "/" + sys_id;
+        JSONObject jsonBody = new JSONObject();
+
+        if(fields!=null && fields.size()>0){
+            for (Value element : fields){
+                Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
+                String name = customValuesMap.containsKey("NAME") ? ((StringValue)customValuesMap.get("NAME")).get() : "";
+                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue)customValuesMap.get("VALUE")).get();
+                if(!value.equals(null)){
+                    jsonBody.put(name, value);
+                }
+            }
+        }
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.SEND(auth, url, "PUT", jsonBody.toString());
             if (response.contains("An error occurred")) {
                 throw new BotCommandException(response);
             }
@@ -119,9 +147,23 @@ public class ServiceNowActions {
         catch(Exception e){
             throw new BotCommandException("Something went wrong with the request. Please try again." + response);
         }
-
         return "Record deleted";
+    }
 
-        //return response;
+    public static String addAttachment(String url, String table, String token, String sys_id, String filePath){
+        url = url + "api/now/attachment/upload";
+        //JSONObject jsonBody = new JSONObject();
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
+            if (response.contains("An error occurred")) {
+                throw new BotCommandException(response);
+            }
+        }
+        catch(Exception e){
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
     }
 }

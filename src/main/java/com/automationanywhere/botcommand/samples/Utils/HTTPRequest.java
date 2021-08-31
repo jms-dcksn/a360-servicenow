@@ -64,13 +64,13 @@ public class HTTPRequest {
         return response.body().string();
     }
 
-    public static String POST(String auth, String url, String body) throws IOException {
+    public static String SEND(String auth, String url, String method, String body) throws IOException {
 
         URL urlForGetRequest = new URL(url);
         String readLine;
         String output="";
         HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-        connection.setRequestMethod("POST");
+        connection.setRequestMethod(method);
         connection.setRequestProperty("Accept", "*/*");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", auth);
@@ -100,12 +100,14 @@ public class HTTPRequest {
 
     //private static String LINE_FEED = "\r\n";
 
-    public static String POSTwFile(String url, String filepath) throws IOException {
+    public static String attachFile(String url, String auth, String table, String sysId, String filepath) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("table_name", table)
+                .addFormDataPart("table_sys_id", sysId)
                 .addFormDataPart("file", filepath,
                         RequestBody.create(MediaType.parse("application/octet-stream"),
                                 new File(filepath)))
@@ -113,6 +115,8 @@ public class HTTPRequest {
         Request request = new Request.Builder()
                 .url(url)
                 .method("POST", body)
+                .addHeader("Authorization", auth)
+                //.addHeader("Content-Type", "multipart/form-data")
                 .addHeader("Cookie", "b=bqjwz6qwia1zsqok1ring9va3")
                 .build();
         Response response = client.newCall(request).execute();

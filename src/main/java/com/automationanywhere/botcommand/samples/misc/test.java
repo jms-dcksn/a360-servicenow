@@ -28,6 +28,7 @@ public class test {
         String password = "AYdIg7w1dXKv";
         String name = "short_description";
         String value = "Why is my computer broken";
+        String sys_id = "1c741bd70b2322007518478d83673af3";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
         //String sLimit = iLimit.toString();
@@ -46,16 +47,16 @@ public class test {
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
 
-        /*String recordCreated = ServiceNowActions.insertRecord(url, "incident", token, list);
-        Object object = new JSONParser().parse(recordCreated);
-        JSONObject json_resp = (JSONObject) object;
-        JSONObject result = (JSONObject) json_resp.get("result");
-        String sys_id = result.get("sys_id").toString();
-        System.out.println(sys_id);*/
+        String recordCreated = ServiceNowActions.updateRecord(url, "incident", sys_id, token, list);
+        //Object object = new JSONParser().parse(recordCreated);
+        //JSONObject json_resp = (JSONObject) object;
+        //JSONObject result = (JSONObject) json_resp.get("result");
+        //String sys_id = result.get("sys_id").toString();
+        System.out.println(recordCreated);
 
-        String response32 = ServiceNowActions.deleteRecord(url, "incident", token, "jibbersih");
+        //String response32 = ServiceNowActions.deleteRecord(url, "incident", token, "jibbersih");
 
-        System.out.println(response32);
+        //System.out.println(response32);
 
 
     }
