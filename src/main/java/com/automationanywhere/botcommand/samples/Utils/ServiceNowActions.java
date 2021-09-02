@@ -79,7 +79,7 @@ public class ServiceNowActions {
     }
 
     public static String triggerOnRecord(String url, String table, String token) {
-        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at&sysparm_limit=1";
+        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description&sysparm_limit=1";
         //add fields as query params
         String method = "GET";
         String auth = "Bearer " + token;
@@ -218,5 +218,19 @@ public class ServiceNowActions {
         catch(Exception e) {
             throw new BotCommandException("Something went wrong with the request. Please try again." + response);
         }
+    }
+
+    public static String deleteAttachment(String url, String token, String sys_id){
+        url = url + "api/now/attachment/" + sys_id;
+        //JSONObject jsonBody = new JSONObject();
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.Request(url, "DELETE", auth);
+        }
+        catch(Exception e) {
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
     }
 }

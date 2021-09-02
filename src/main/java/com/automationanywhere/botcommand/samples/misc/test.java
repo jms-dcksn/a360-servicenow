@@ -6,6 +6,7 @@ import com.automationanywhere.botcommand.data.impl.StringValue;
 import com.automationanywhere.botcommand.exception.BotCommandException;
 import com.automationanywhere.botcommand.samples.Utils.HTTPRequest;
 import com.automationanywhere.botcommand.samples.Utils.ServiceNowActions;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -56,30 +57,32 @@ public class test {
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
         String errorMessage = "";
-        JSONObject result = null;
 
-        String lastIncident = ServiceNowActions.triggerOnRecord(url, "incident", token);
-        Object obj2 = null;
+        String result = ServiceNowActions.deleteAttachment(url, token, "009c53e0bf1101007a6d257b3f0739c0");
+        System.out.println(result);
+
+        /*String lastIncident = ServiceNowActions.triggerOnRecord(url, "incident", token);
+        System.out.println(lastIncident);
+        Object obj2;
         try {
             obj2 = new JSONParser().parse(lastIncident);
         } catch (ParseException e) {
             throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
         }
         JSONObject json_result = (JSONObject) obj2;
-        String opened_at = (String) json_result.get("opened_at");
+        JSONArray resultArray = (JSONArray) json_result.get("result");
+        JSONObject time = (JSONObject) resultArray.get(0);
+        String opened_at = (String) time.get("opened_at");
+        Integer incidentPriority = Integer.parseInt(time.get("priority").toString());
+        System.out.println(opened_at);
+        System.out.println(incidentPriority);
         ZonedDateTime dt2 = ZonedDateTime.parse(opened_at,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("America/Los_Angeles")));
-        if(dt2.isAfter(lastRun)) {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")));
+        if(dt2.isAfter(lastRun) && incidentPriority <= 5) {
             System.out.println("Triggered");
-        } else { System.out.println("Not triggered"); }
-
-
-
-
+        } else { System.out.println("Not triggered"); }*/
         //String records = ServiceNowActions.getRecords(url, table, token, list, "");
         //System.out.println(records);
-
-
 
     }
 

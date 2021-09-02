@@ -96,14 +96,31 @@ public class IncidentTriggerTrigger implements Trigger3 {
       throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","password"));
     }
 
-    if(parameters.containsKey("tz") && parameters.get("tz") != null && parameters.get("tz").get() != null) {
-      convertedParameters.put("tz", parameters.get("tz").get());
-      if(convertedParameters.get("tz") !=null && !(convertedParameters.get("tz") instanceof String)) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","tz", "String", parameters.get("tz").get().getClass().getSimpleName()));
+    if(parameters.containsKey("priority") && parameters.get("priority") != null && parameters.get("priority").get() != null) {
+      convertedParameters.put("priority", parameters.get("priority").get());
+      if(convertedParameters.get("priority") !=null && !(convertedParameters.get("priority") instanceof String)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","priority", "String", parameters.get("priority").get().getClass().getSimpleName()));
       }
     }
-    if(convertedParameters.get("tz") == null) {
-      throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","tz"));
+    if(convertedParameters.get("priority") != null) {
+      switch((String)convertedParameters.get("priority")) {
+        case "1" : {
+
+        } break;
+        case "2" : {
+
+        } break;
+        case "3" : {
+
+        } break;
+        case "4" : {
+
+        } break;
+        case "5" : {
+
+        } break;
+        default : throw new TriggerException(MESSAGES_GENERIC.getString("generic.InvalidOption","priority"));
+      }
     }
 
     if(parameters.containsKey("interval") && parameters.get("interval") != null && parameters.get("interval").get() != null) {
@@ -117,8 +134,8 @@ public class IncidentTriggerTrigger implements Trigger3 {
     }
     if(convertedParameters.containsKey("interval")) {
       try {
-        if(convertedParameters.get("interval") != null && !((double)convertedParameters.get("interval") > 0)) {
-          throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.GreaterThan","interval", "0"));
+        if(convertedParameters.get("interval") != null && !((double)convertedParameters.get("interval") > 29)) {
+          throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.GreaterThan","interval", "29"));
         }
       }
       catch(ClassCastException e) {
@@ -135,7 +152,7 @@ public class IncidentTriggerTrigger implements Trigger3 {
     command.setConsumer(triggerListenerContext.getEventCallback());
     command.setTriggerUid(triggerListenerContext.getTriggerUid());
     try {
-      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("tz"),(Double)convertedParameters.get("interval"));}
+      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("priority"),(Double)convertedParameters.get("interval"));}
     catch (ClassCastException e) {
       throw new TriggerException(MESSAGES_GENERIC.getString("generic.IllegalParameters","startTrigger"));
     }
