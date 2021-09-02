@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashMap;
@@ -77,6 +78,23 @@ public class ServiceNowActions {
         return response;
     }
 
+    public static String triggerOnRecord(String url, String table, String token) {
+        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at&sysparm_limit=1";
+        //add fields as query params
+        String method = "GET";
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.Request(url, method, auth);
+            if (response.contains("An error occurred")) {
+                throw new BotCommandException(response);
+            }
+        } catch (Exception e) {
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
+    }
+
     public static String insertRecord(String url, String table, String token, List<Value> fields){
         url = url + "api/now/table/" + table + "?sysparm_fields=sys_id";
         JSONObject jsonBody = new JSONObject();
@@ -105,7 +123,7 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String updateRecord(String url, String table, String sys_id, String token, List<Value> fields){
+    public static String modifyRecord(String url, String method, String table, String sys_id, String token, List<Value> fields){
         url = url + "api/now/table/" + table + "/" + sys_id;
         JSONObject jsonBody = new JSONObject();
 
@@ -122,13 +140,38 @@ public class ServiceNowActions {
         String auth = "Bearer " + token;
         String response = "";
         try {
-            response = HTTPRequest.SEND(auth, url, "PUT", jsonBody.toString());
+            response = HTTPRequest.SEND(auth, url, method, jsonBody.toString());
             if (response.contains("An error occurred")) {
                 throw new BotCommandException(response);
             }
         }
         catch(Exception e){
             throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
+    }
+
+    public static String updateRecord(String url, String token, String table, String sys_id, List<Value> list) throws IOException {
+        url = url + "api/now/table/" + table + "/" + sys_id;
+        JSONObject jsonBody = new JSONObject();
+
+        if(list!=null && list.size()>0){
+            for (Value element : list){
+                Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
+                String name = customValuesMap.containsKey("NAME") ? ((StringValue)customValuesMap.get("NAME")).get() : "";
+                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue)customValuesMap.get("VALUE")).get();
+                if(!value.equals(null)){
+                    jsonBody.put(name, value);
+                }
+            }
+        }
+        System.out.println(jsonBody);
+        String auth = "Bearer " + token;
+        String response = "";
+
+        response = HTTPRequest.httpPatch(url, auth, jsonBody.toString());
+        if (response.contains("error")) {
+            throw new BotCommandException(response);
         }
         return response;
     }

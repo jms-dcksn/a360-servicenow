@@ -71,7 +71,7 @@ public class HTTPRequest {
         String output="";
         HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
         connection.setRequestMethod(method);
-        connection.setRequestProperty("Accept", "*/*");
+        connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", auth);
         connection.setDoOutput(true);
@@ -98,7 +98,23 @@ public class HTTPRequest {
         return output;
     }
 
-    //private static String LINE_FEED = "\r\n";
+    public static String httpPatch(String url, String auth, String jsonBody) throws IOException {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, jsonBody);
+        Request request = new Request.Builder()
+                .url(url)
+                .method("PATCH", body)
+                .addHeader("Authorization", auth)
+                //.addHeader("Content-Type", "multipart/form-data")
+                //.addHeader("Cookie", "b=bqjwz6qwia1zsqok1ring9va3")
+                .build();
+        Response response = client.newCall(request).execute();
+
+        return response.body().string();
+    }
 
     public static String attachFile(String url, String auth, String table, String sysId, String filepath) throws IOException {
 

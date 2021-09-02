@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210831-141236",
-    "codeVersion": "1.0.0-20210831-141236",
+    "packageVersion": "1.0.0-20210901-151729",
+    "codeVersion": "1.0.0-20210901-151729",
     "author": "",
     "commands": [
         {
@@ -574,13 +574,13 @@
             ]
         },
         {
-            "name": "UpdateRecord",
-            "label": "Update a Record",
-            "description": "Updates a record to the specified table",
+            "name": "ModifyRecord",
+            "label": "Modify a Record",
+            "description": "Modifies record attributes in the specified table",
             "nodeLabel": "Modify a Servicenow record in session {{sessionName}}",
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
-            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.UpdateRecordCommand",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.ModifyRecordCommand",
             "groupLabel": "Records",
             "icon": "snow.svg",
             "comment": true,
@@ -651,6 +651,110 @@
                         {
                             "name": "NAME",
                             "label": "Servicenow key"
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value"
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "NAME",
+                            "label": "Name",
+                            "type": "TEXT",
+                            "rules": [
+                                {
+                                    "name": "NOT_EMPTY"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "VALUE",
+                            "label": "Value",
+                            "type": "TEXT"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UpdateRecord",
+            "label": "Update a Record",
+            "description": "Updates a record in the specified table",
+            "nodeLabel": "Update a Servicenow record in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.UpdateRecordCommand",
+            "groupLabel": "Records",
+            "icon": "snow.svg",
+            "comment": true,
+            "returnType": "STRING",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign output to a string",
+            "returnRequired": false,
+            "returnDescription": "Returns sys_id in a string variable",
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "table",
+                    "label": "Table",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_Id",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "values",
+                    "label": "Values to update in record",
+                    "description": "Use this action to add updates to a record, such as comments. e.g. key: comments, value: Please try to reboot your computer",
+                    "type": "ENTRYLIST",
+                    "rules": [
+                        {
+                            "name": "ENTRYLIST_ADD_LABEL",
+                            "value": "Add entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_EMPTY_LABEL",
+                            "value": "No values to return"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_LABEL",
+                            "value": "Provide entry"
+                        },
+                        {
+                            "name": "ENTRYLIST_ENTRY_UNIQUE",
+                            "value": "NAME"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "name": "NAME",
+                            "label": "ServiceNow key"
                         },
                         {
                             "name": "VALUE",

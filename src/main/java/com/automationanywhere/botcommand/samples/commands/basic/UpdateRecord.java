@@ -3,6 +3,7 @@ package com.automationanywhere.botcommand.samples.commands.basic;
 import com.automationanywhere.botcommand.data.Value;
 import com.automationanywhere.botcommand.data.impl.StringValue;
 import com.automationanywhere.botcommand.exception.BotCommandException;
+import com.automationanywhere.botcommand.samples.Utils.HTTPRequest;
 import com.automationanywhere.botcommand.samples.Utils.SNOWServer;
 import com.automationanywhere.botcommand.samples.Utils.ServiceNowActions;
 import com.automationanywhere.commandsdk.annotations.*;
@@ -14,7 +15,9 @@ import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.commandsdk.model.DataType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +34,9 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
         //Unique name inside a package and label to display.
         name = "UpdateRecord",
         label = "Update a Record",
-        node_label = "Modify a Servicenow record in session {{sessionName}}",
+        node_label = "Update a Servicenow record in session {{sessionName}}",
         group_label = "Records",
-        description = "Updates a record to the specified table",
+        description = "Updates a record in the specified table",
         icon = "snow.svg",
         comment = true ,
         //background_color =  "#293E40",
@@ -63,11 +66,12 @@ public class UpdateRecord {
             @Idx(index = "3", type = TEXT) @Pkg(label = "Sys_Id", default_value_type = STRING)
             @NotEmpty String sys_id,
             @Idx(index = "4", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "Servicenow key")),
+                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "ServiceNow key")),
                     @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "Value")),
             })
             //Label you see at the top of the control
-            @Pkg(label = "Values to update in record", description = "e.g. key: short_description, value: my computer crashed")
+            @Pkg(label = "Values to update in record", description = "Use this action to add updates to a record, such as comments. " +
+                    "e.g. key: comments, value: Please try to reboot your computer")
             //Header of the entry form
             @EntryListLabel(value = "Provide entry")
             //Button label which displays the entry form
@@ -77,20 +81,22 @@ public class UpdateRecord {
             //Message to display in table when no entries are present.
             @EntryListEmptyLabel(value = "No values to return")
                     List<Value> values
-    ) {
+    ) throws IOException, ParseException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
         String response = "";
+        String errorMessage = "";
         JSONObject result;
-        try {
-            response = ServiceNowActions.updateRecord(url, table, sys_id, token, values);
-            Object obj = new JSONParser().parse(response);
-            JSONObject json_resp = (JSONObject) obj;
-            result = (JSONObject) json_resp.get("result");
-        } catch(Exception e){
-            throw new BotCommandException("ServiceNow didn't accept the record update request. Exception caught " + e);
+        response = ServiceNowActions.updateRecord(url, token, table, sys_id, values);
+        Object obj = new JSONParser().parse(response);
+        JSONObject json_resp = (JSONObject) obj;
+        if(json_resp.containsKey("error")){
+            JSONObject errorObject =  (JSONObject) json_resp.get("error");
+            errorMessage = errorObject.get("message").toString() + ", details: " + errorObject.get("detail").toString();
+            throw new BotCommandException("ServiceNow did not find the record at the specific sys_id. " + errorMessage);
         }
+        result = (JSONObject) json_resp.get("result");
         return new StringValue(result.get("sys_id").toString());
     }
     public void setSessionMap(Map<String, Object> sessionMap) {

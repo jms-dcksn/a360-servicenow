@@ -8,7 +8,12 @@ import com.automationanywhere.botcommand.samples.Utils.HTTPRequest;
 import com.automationanywhere.botcommand.samples.Utils.ServiceNowActions;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,9 +32,10 @@ public class test {
         String clientSecret = ",|cblfsVD}";
         String username = "admin";
         String password = "AYdIg7w1dXKv";
-        String name = "short_description";
-        String value = "Why is my computer broken";
-        String sys_id = "1b2aca391b1230104b7a0f26624bcb3e";
+        String table = "incident";
+        String name = "timestamp";
+        String value = "opened_at";
+        String sys_id = "e8caedcbc0a80164017df472f39eaed1";
         String filePath = "C:\\Users\\jamesdickson\\Pictures\\thumbnail2.png";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
@@ -43,6 +49,7 @@ public class test {
         //url = url + "api/now/table/incident/" + sys_id;
 
         //String method = "GET";
+        ZonedDateTime lastRun = ZonedDateTime.now();
 
         String response = HTTPRequest.oAuthMethod(url, clientId, clientSecret, username, password);
         Object obj = new JSONParser().parse(response);
@@ -51,24 +58,27 @@ public class test {
         String errorMessage = "";
         JSONObject result = null;
 
+        String lastIncident = ServiceNowActions.triggerOnRecord(url, "incident", token);
+        Object obj2 = null;
+        try {
+            obj2 = new JSONParser().parse(lastIncident);
+        } catch (ParseException e) {
+            throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+        }
+        JSONObject json_result = (JSONObject) obj2;
+        String opened_at = (String) json_result.get("opened_at");
+        ZonedDateTime dt2 = ZonedDateTime.parse(opened_at,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("America/Los_Angeles")));
+        if(dt2.isAfter(lastRun)) {
+            System.out.println("Triggered");
+        } else { System.out.println("Not triggered"); }
 
-            ServiceNowActions.downloadAttachment(url, token, sys_id, filePath);
-            /*Object object = new JSONParser().parse(recordCreated);
-            JSONObject json_resp = (JSONObject) object;
-            if (json_resp.containsKey("error")) {
-                JSONObject errorObject =  (JSONObject) json_resp.get("error");
-                errorMessage = errorObject.get("message").toString() + ", details: " + errorObject.get("detail").toString();
-                throw new BotCommandException("ServiceNow did not find the record at the specific sys_id. " + errorMessage);
-            }
-            result = (JSONObject) json_resp.get("result");
 
 
-        String sys_id_result = result.get("sys_id").toString();
-        System.out.println(sys_id_result);*/
 
-        //String response32 = ServiceNowActions.deleteRecord(url, "incident", token, "jibbersih");
+        //String records = ServiceNowActions.getRecords(url, table, token, list, "");
+        //System.out.println(records);
 
-        //System.out.println(response32);
 
 
     }
