@@ -71,7 +71,7 @@ public class GetRecord {
             @NotEmpty String sys_id,
             @Idx(index = "4", type = ENTRYLIST, options = {
                     @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "Dictionary variable key")),
-                    @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "Servicenow response key")),
+                    @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "ServiceNow response key")),
             })
             //Label you see at the top of the control
             @Pkg(label = "Values to return in dictionary", description = "e.g. name: incident description, value: short_description")

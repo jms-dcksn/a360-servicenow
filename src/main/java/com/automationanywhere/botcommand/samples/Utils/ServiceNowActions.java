@@ -79,7 +79,24 @@ public class ServiceNowActions {
     }
 
     public static String triggerOnRecord(String url, String table, String token) {
-        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description&sysparm_limit=1";
+        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description,sys_id&sysparm_limit=1";
+        //add fields as query params
+        String method = "GET";
+        String auth = "Bearer " + token;
+        String response = "";
+        try {
+            response = HTTPRequest.Request(url, method, auth);
+            if (response.contains("An error occurred")) {
+                throw new BotCommandException(response);
+            }
+        } catch (Exception e) {
+            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+        }
+        return response;
+    }
+
+    public static String watchIncident(String url, String token, String sys_id) {
+        url = url + "api/now/table/incident/" + sys_id + "?sysparm_fields=sys_updated_on,sys_updated_by,short_description,comments&sysparm_display_value=true";
         //add fields as query params
         String method = "GET";
         String auth = "Bearer " + token;

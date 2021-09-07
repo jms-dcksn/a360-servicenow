@@ -59,7 +59,7 @@ public class A_StartSession {
 			@Idx(index = "1", type = TEXT)
 			@Pkg(label = "Start Session", default_value_type = STRING, default_value = "Default")
 			@NotEmpty String name,
-			@Idx(index = "2", type = TEXT) @Pkg(label = "ServiceNow URL") @NotEmpty String url,
+			@Idx(index = "2", type = TEXT) @Pkg(label = "ServiceNow URL", description = "e.g. https://{Your-Instance}.service-now.com/") @NotEmpty String url,
 			@Idx(index = "3", type = CREDENTIAL) @Pkg(label = "Client ID") @NotEmpty SecureString clientId,
 			@Idx(index = "4", type = CREDENTIAL) @Pkg(label = "Client Secret") @NotEmpty SecureString clientSecret,
 			@Idx(index = "5", type = CREDENTIAL) @Pkg(label = "User Name") @NotEmpty SecureString username,

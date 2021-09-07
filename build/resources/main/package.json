@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210902-091820",
-    "codeVersion": "1.0.0-20210902-091820",
+    "packageVersion": "1.0.0-20210903-092922",
+    "codeVersion": "1.0.0-20210903-092922",
     "author": "",
     "commands": [
         {
@@ -128,6 +128,7 @@
                 {
                     "name": "url",
                     "label": "ServiceNow URL",
+                    "description": "e.g. https://{Your-Instance}.service-now.com/",
                     "type": "TEXT",
                     "rules": [
                         {
@@ -169,6 +170,45 @@
                     "name": "password",
                     "label": "Password",
                     "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "DeleteAttachment",
+            "label": "Delete Attachment",
+            "description": "Deletes an attachment to the specified record",
+            "nodeLabel": "Deletes an attachment in session {{sessionName}}",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.DeleteAttachmentCommand",
+            "groupLabel": "Attachments",
+            "icon": "snow.svg",
+            "comment": true,
+            "attributes": [
+                {
+                    "name": "sessionName",
+                    "label": "Session name",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "Default",
+                        "type": "STRING"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_Id",
+                    "description": "Enter sys_id for the attachment",
+                    "type": "TEXT",
                     "rules": [
                         {
                             "name": "NOT_EMPTY"
@@ -356,7 +396,7 @@
                         },
                         {
                             "name": "VALUE",
-                            "label": "Servicenow response key"
+                            "label": "ServiceNow response key"
                         }
                     ],
                     "attributes": [
@@ -450,7 +490,7 @@
                         },
                         {
                             "name": "VALUE",
-                            "label": "Servicenow response key"
+                            "label": "ServiceNow response key"
                         }
                     ],
                     "attributes": [
@@ -546,7 +586,7 @@
                     "options": [
                         {
                             "name": "NAME",
-                            "label": "Servicenow key"
+                            "label": "ServiceNow key"
                         },
                         {
                             "name": "VALUE",
@@ -650,7 +690,7 @@
                     "options": [
                         {
                             "name": "NAME",
-                            "label": "Servicenow key"
+                            "label": "ServiceNow key"
                         },
                         {
                             "name": "VALUE",
@@ -785,19 +825,17 @@
     "triggers": [
         {
             "name": "incidenttrigger",
-            "label": "Incident Trigger",
+            "label": "New Incident",
             "description": "Trigger when a new incident is created",
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
             "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.IncidentTriggerTrigger",
-            "icon": "todo.svg",
-            "textColor": "#7B848B",
-            "backgroundColor": "#a6a6a6",
+            "icon": "snow.svg",
             "returnType": "RECORD",
             "returnSubtype": "UNDEFINED",
             "returnLabel": "",
             "returnRequired": false,
-            "returnDescription": "Available keys: triggerType, id",
+            "returnDescription": "Available keys: triggerType, opened_at, number, description, sys_id",
             "returnName": "TriggerData",
             "attributes": [
                 {
@@ -853,12 +891,17 @@
                 {
                     "name": "priority",
                     "label": "Filter on Priority Level",
-                    "description": "An incident with priority level at or above input priority will initiate the trigger. i.e. If 5 is selected (lowest priority), all created incidents will initiate the trigger.",
+                    "description": "An incident with priority level at or above input priority will initiate the trigger. i.e. If 5 is selected (lowest priority), all created incidents will initiate the trigger. Leaving this field blank will watch all incidents regardless of priority.",
                     "type": "SELECT",
                     "defaultValue": {
                         "string": "5",
                         "type": "STRING"
                     },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ],
                     "options": [
                         {
                             "label": "1 - Critical",
@@ -885,6 +928,7 @@
                 {
                     "name": "interval",
                     "label": "Please provide the interval to trigger in seconds",
+                    "description": "Interval should not be less than 30 seconds.",
                     "type": "NUMBER",
                     "defaultValue": {
                         "number": "120",
@@ -896,7 +940,106 @@
                         },
                         {
                             "name": "GREATER_THAN",
-                            "value": "0"
+                            "value": "29"
+                        },
+                        {
+                            "name": "NUMBER_INTEGER"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "watchIncident",
+            "label": "Watch Incident",
+            "description": "Trigger when a specified incident is updated",
+            "minimumControlRoomVersion": "8750",
+            "minimumBotAgentVersion": "20.11",
+            "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.WatchIncidentTrigger",
+            "icon": "snow.svg",
+            "returnType": "RECORD",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "",
+            "returnRequired": false,
+            "returnDescription": "Available keys: triggerType, updated_at, updated_by, description",
+            "returnName": "TriggerData",
+            "attributes": [
+                {
+                    "name": "url",
+                    "label": "ServiceNow URL",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "clientId",
+                    "label": "Client ID",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "clientSecret",
+                    "label": "Client Secret",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "username",
+                    "label": "User Name",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "password",
+                    "label": "Password",
+                    "type": "CREDENTIAL",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "sys_id",
+                    "label": "Sys_id of incident to watch",
+                    "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "interval",
+                    "label": "Please provide the interval to trigger in seconds",
+                    "description": "Interval should not be less than 30 seconds.",
+                    "type": "NUMBER",
+                    "defaultValue": {
+                        "number": "120",
+                        "type": "NUMBER"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        },
+                        {
+                            "name": "GREATER_THAN",
+                            "value": "29"
                         },
                         {
                             "name": "NUMBER_INTEGER"

@@ -34,13 +34,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 @BotCommand(commandType = BotCommand.CommandType.Trigger)
-@CommandPkg(label = "Incident Trigger",
+@CommandPkg(label = "New Incident",
         description = "Trigger when a new incident is created",
         icon = "snow.svg",
         name = "incidenttrigger",
         return_type = RECORD,
         return_name = "TriggerData",
-        return_description = "Available keys: triggerType, id")
+        return_description = "Available keys: triggerType, opened_at, number, description, sys_id")
 
 public class IncidentTrigger {
     private ZonedDateTime lastRun;
@@ -74,7 +74,7 @@ public class IncidentTrigger {
                     "level at or above input priority will initiate the trigger. " +
                     "i.e. If 5 is selected (lowest priority), all created incidents will initiate the trigger. Leaving " +
                     "this field blank will watch all incidents regardless of priority.", default_value = "5")
-            String priority,
+            @NotEmpty String priority,
             @Idx(index = "7", type = AttributeType.NUMBER)
             @Pkg(label = "Please provide the interval to trigger in seconds", default_value = "120", default_value_type = DataType.NUMBER,
             description = "Interval should not be less than 30 seconds.")
@@ -91,10 +91,7 @@ public class IncidentTrigger {
         String ins_password = password.getInsecureString();
         String response= "";
         String token = "";
-        Integer intPriority;
-        if (priority.equals("")){
-            intPriority = 5;
-        } else { intPriority = Integer.parseInt(priority); }
+        Integer intPriority = Integer.parseInt(priority);
         try {
             response = HTTPRequest.oAuthMethod(url, ins_clientId, ins_clientSecret, ins_username, ins_password);
             Object obj = new JSONParser().parse(response);
@@ -125,17 +122,19 @@ public class IncidentTrigger {
                 Integer incidentPriority = Integer.parseInt(time.get("priority").toString());
                 String number = time.get("number").toString();
                 String description = time.get("short_description").toString();
+                String sys_id = time.get("sys_id").toString();
                 if(dt2.isAfter(lastRun) && incidentPriority <= intPriority){
-                    consumer.accept(getRecordValue(opened_at, number, description));
+                    lastRun = dt2;
+                    consumer.accept(getRecordValue(opened_at, number, description, sys_id));
                     return;
-                } else { lastRun = ZonedDateTime.now(); }
+                } //else { lastRun = ZonedDateTime.now(); }
             }
         };
         taskMap.put(this.triggerUid, timerTask);
         TIMER.schedule(timerTask, interval.longValue()*1000, interval.longValue()*1000);
     }
 
-    private RecordValue getRecordValue(String time, String number, String description) {
+    private RecordValue getRecordValue(String time, String number, String description, String sys_id) {
         List<Schema> schemas = new LinkedList<>();
         List<Value> values = new LinkedList<>();
         schemas.add(new Schema("triggerType"));
@@ -146,6 +145,8 @@ public class IncidentTrigger {
         values.add(new StringValue(number));
         schemas.add(new Schema("description"));
         values.add(new StringValue(description));
+        schemas.add(new Schema("sys_id"));
+        values.add(new StringValue(sys_id));
 
         RecordValue recordValue = new RecordValue();
         recordValue.set(new Record(schemas,values));

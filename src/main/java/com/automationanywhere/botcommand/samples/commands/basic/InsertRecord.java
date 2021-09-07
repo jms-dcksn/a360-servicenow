@@ -65,7 +65,7 @@ public class InsertRecord {
             @Idx(index = "2", type = TEXT) @Pkg(label = "Table", default_value_type = STRING)
             @NotEmpty String table,
             @Idx(index = "3", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "3.1", pkg = @Pkg(title = "NAME", label = "Servicenow key")),
+                    @Idx.Option(index = "3.1", pkg = @Pkg(title = "NAME", label = "ServiceNow key")),
                     @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "Value")),
             })
             //Label you see at the top of the control

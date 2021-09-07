@@ -66,7 +66,7 @@ public class ModifyRecord {
             @Idx(index = "3", type = TEXT) @Pkg(label = "Sys_Id", default_value_type = STRING)
             @NotEmpty String sys_id,
             @Idx(index = "4", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "Servicenow key")),
+                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "ServiceNow key")),
                     @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "Value")),
             })
             //Label you see at the top of the control

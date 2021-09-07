@@ -58,10 +58,9 @@ public class test {
         String token = (String) details.get("access_token");
         String errorMessage = "";
 
-        String result = ServiceNowActions.deleteAttachment(url, token, "009c53e0bf1101007a6d257b3f0739c0");
-        System.out.println(result);
 
-        /*String lastIncident = ServiceNowActions.triggerOnRecord(url, "incident", token);
+
+        String lastIncident = ServiceNowActions.watchIncident(url, token, sys_id);
         System.out.println(lastIncident);
         Object obj2;
         try {
@@ -69,18 +68,23 @@ public class test {
         } catch (ParseException e) {
             throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
         }
-        JSONObject json_result = (JSONObject) obj2;
-        JSONArray resultArray = (JSONArray) json_result.get("result");
-        JSONObject time = (JSONObject) resultArray.get(0);
-        String opened_at = (String) time.get("opened_at");
-        Integer incidentPriority = Integer.parseInt(time.get("priority").toString());
-        System.out.println(opened_at);
-        System.out.println(incidentPriority);
-        ZonedDateTime dt2 = ZonedDateTime.parse(opened_at,
+        JSONObject json_obj = (JSONObject) obj2;
+        JSONObject json_result = (JSONObject) json_obj.get("result");
+        String sys_updated_on = (String) json_result.get("sys_updated_on");
+        ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")));
-        if(dt2.isAfter(lastRun) && incidentPriority <= 5) {
+        String description = json_result.get("short_description").toString();
+        String updated_by = json_result.get("sys_updated_by").toString();
+        String comments = json_result.get("comments").toString();
+        String[] arrOfStr = comments.split("\\n");
+        String comment = arrOfStr[1];
+        System.out.println(comment);
+        System.out.println(sys_updated_on);
+        System.out.println(updated_by);
+        System.out.println(description);
+        if(dt2.isAfter(lastRun)) {
             System.out.println("Triggered");
-        } else { System.out.println("Not triggered"); }*/
+        } else { System.out.println("Not triggered"); }
         //String records = ServiceNowActions.getRecords(url, table, token, list, "");
         //System.out.println(records);
 

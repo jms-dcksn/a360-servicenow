@@ -69,7 +69,7 @@ public class GetRecords {
             @NotEmpty String table,
             @Idx(index = "3", type = ENTRYLIST, options = {
                     @Idx.Option(index = "3.1", pkg = @Pkg(title = "NAME", label = "Dictionary variable key for output")),
-                    @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "Servicenow response key")),
+                    @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "ServiceNow response key")),
             })
             //Label you see at the top of the control
             @Pkg(label = "Values to return for each dictionary in list",

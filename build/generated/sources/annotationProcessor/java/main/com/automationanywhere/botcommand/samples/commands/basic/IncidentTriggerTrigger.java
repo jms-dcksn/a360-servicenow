@@ -102,6 +102,9 @@ public class IncidentTriggerTrigger implements Trigger3 {
         throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","priority", "String", parameters.get("priority").get().getClass().getSimpleName()));
       }
     }
+    if(convertedParameters.get("priority") == null) {
+      throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","priority"));
+    }
     if(convertedParameters.get("priority") != null) {
       switch((String)convertedParameters.get("priority")) {
         case "1" : {
