@@ -65,6 +65,10 @@ public class A_StartSession {
 			@Idx(index = "5", type = CREDENTIAL) @Pkg(label = "User Name") @NotEmpty SecureString username,
 			@Idx(index = "6", type = CREDENTIAL) @Pkg(label = "Password") @NotEmpty SecureString password
 	) throws ParseException, IOException {
+		//URL check
+		if(!url.endsWith("/")){
+			url = url + "/";
+		}
 		String ins_clientId = clientId.getInsecureString();
 		String ins_clientSecret = clientSecret.getInsecureString();
 		String ins_username = username.getInsecureString();

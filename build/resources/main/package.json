@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210903-092922",
-    "codeVersion": "1.0.0-20210903-092922",
+    "packageVersion": "1.0.0-20210913-165721",
+    "codeVersion": "1.0.0-20210913-165721",
     "author": "",
     "commands": [
         {
@@ -330,7 +330,7 @@
             "returnSubtype": "UNDEFINED",
             "returnLabel": "Assign output to a dictionary variable",
             "returnRequired": false,
-            "returnDescription": "Specify dictionary keys in entry list",
+            "returnDescription": "Output Dictionary keys are specified in the entry list",
             "attributes": [
                 {
                     "name": "sessionName",
@@ -369,7 +369,7 @@
                 {
                     "name": "values",
                     "label": "Values to return in dictionary",
-                    "description": "e.g. name: incident description, value: short_description",
+                    "description": "The Output Dictionary Key specified above will be the key used in the output Dictionary variable. The ServiceNow key needs to be obtained from the API documentation for ServiceNow. e.g. Output Dictionary Key: 'description', value: 'short_description' This will return the value at 'short_description' from the ServiceNow response and write to the key 'description' in the output Dictionary variable",
                     "type": "ENTRYLIST",
                     "rules": [
                         {
@@ -434,7 +434,7 @@
             "returnSubtype": "UNDEFINED",
             "returnLabel": "Assign output to a list of dictionary variables",
             "returnRequired": false,
-            "returnDescription": "Specify dictionary keys in entry list",
+            "returnDescription": "Output Dictionary keys are specified in the entry list",
             "attributes": [
                 {
                     "name": "sessionName",
@@ -462,8 +462,8 @@
                 },
                 {
                     "name": "values",
-                    "label": "Values to return for each dictionary in list",
-                    "description": "e.g. name: incident description, value: short_description",
+                    "label": "Values to Return for Each Dictionary in List",
+                    "description": "The Output Dictionary Key specified above will be the key used in the output Dictionary variable. The ServiceNow key needs to be obtained from the API documentation for ServiceNow. e.g. Output Dictionary Key: 'description', value: 'short_description' This will return the value at 'short_description' in the ServiceNow response and write to the key 'description' in the output Dictionary variable",
                     "type": "ENTRYLIST",
                     "rules": [
                         {
@@ -516,14 +516,20 @@
                     "label": "Limit",
                     "description": "Limits the total number of records returned",
                     "type": "NUMBER"
+                },
+                {
+                    "name": "query",
+                    "label": "Encoded Query String (i.e. sysparm_query)",
+                    "description": "Encoded query string can be obtained by copying from a list filter in ServiceNow. Please see ServiceNow documentation for more info. https://docs.servicenow.com/bundle/rome-platform-user-interface/page/use/using-lists/concept/c_EncodedQueryStrings.html",
+                    "type": "TEXT"
                 }
             ]
         },
         {
             "name": "InsertRecord",
-            "label": "Add Record",
-            "description": "Adds a record to the specified table",
-            "nodeLabel": "Add a ServiceNow record in session {{sessionName}}",
+            "label": "Create Record",
+            "description": "Creates a record to the specified table",
+            "nodeLabel": "Create a ServiceNow record in session {{sessionName}}",
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
             "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.InsertRecordCommand",

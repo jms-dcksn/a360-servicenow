@@ -56,16 +56,24 @@ public class AddAttachment {
             @Idx(index = "4", type = FILE) @Pkg(label = "File to upload as attachment")
             @NotEmpty String filePath
     ) throws ParseException {
+        if(filePath.equals("")){
+            throw new BotCommandException("The entered file path is empty and not a valid input.");
+        }
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
         String response = "";
         String errorMessage = "";
         JSONObject result;
+        JSONObject json_resp=null;
 
-        response = ServiceNowActions.addAttachment(url, table, token, sys_id, filePath);
-        Object obj = new JSONParser().parse(response);
-        JSONObject json_resp = (JSONObject) obj;
+        try {
+            response = ServiceNowActions.addAttachment(url, table, token, sys_id, filePath);
+            Object obj = new JSONParser().parse(response);
+            json_resp = (JSONObject) obj;
+        } catch (ParseException e) {
+            throw new BotCommandException("ServiceNow could not complete the request. Please check your inputs. " + errorMessage);
+        }
         if (json_resp.containsKey("error")) {
             JSONObject errorObject =  (JSONObject) json_resp.get("error");
             errorMessage = errorObject.get("message").toString() + ", details: " + errorObject.get("detail").toString();

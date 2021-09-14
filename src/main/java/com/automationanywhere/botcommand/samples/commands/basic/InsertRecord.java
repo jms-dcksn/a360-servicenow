@@ -34,10 +34,10 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
 @CommandPkg(
         //Unique name inside a package and label to display.
         name = "InsertRecord",
-        label = "Add Record",
-        node_label = "Add a ServiceNow record in session {{sessionName}}",
+        label = "Create Record",
+        node_label = "Create a ServiceNow record in session {{sessionName}}",
         group_label = "Records",
-        description = "Adds a record to the specified table",
+        description = "Creates a record to the specified table",
         icon = "snow.svg",
         comment = true ,
         //background_color =  "#293E40",

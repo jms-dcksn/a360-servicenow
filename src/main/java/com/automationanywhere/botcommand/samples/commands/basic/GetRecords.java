@@ -46,7 +46,7 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
         //background_color =  "#293E40",
         return_label = "Assign output to a list of dictionary variables",
         return_type = DataType.LIST,
-        return_description = "Specify dictionary keys in entry list")
+        return_description = "Output Dictionary keys are specified in the entry list")
 
 public class GetRecords {
     @Sessions
@@ -72,8 +72,13 @@ public class GetRecords {
                     @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "ServiceNow response key")),
             })
             //Label you see at the top of the control
-            @Pkg(label = "Values to return for each dictionary in list",
-                    description = "e.g. name: incident description, value: short_description")
+            @Pkg(label = "Values to Return for Each Dictionary in List",
+                    description = "The Output Dictionary Key specified above will be the key " +
+                            "used in the output Dictionary variable. The ServiceNow key needs to " +
+                            "be obtained from the API documentation for ServiceNow." +
+                            " e.g. Output Dictionary Key: 'description', value: 'short_description'" +
+                            " This will return the value at 'short_description' in the ServiceNow response" +
+                            " and write to the key 'description' in the output Dictionary variable")
             //Header of the entry form
             @EntryListLabel(value = "Provide entry")
             //Button label which displays the entry form
@@ -85,7 +90,11 @@ public class GetRecords {
                     List<Value> values,
             @Idx(index = "4", type = AttributeType.NUMBER) @Pkg(label = "Limit", default_value_type = DataType.NUMBER,
                     description = "Limits the total number of records returned")
-            Double limit
+            Double limit,
+            @Idx(index = "5", type = TEXT) @Pkg(label = "Encoded Query String (i.e. sysparm_query)", default_value_type = STRING,
+            description = "Encoded query string can be obtained by copying from a list filter in ServiceNow. Please see " +
+                    "ServiceNow documentation for more info. https://docs.servicenow.com/bundle/rome-platform-user-interface/page/use/using-lists/concept/c_EncodedQueryStrings.html")
+            String query
     ) throws IOException, ParseException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
@@ -95,7 +104,7 @@ public class GetRecords {
         String response = "";
         JSONArray resultArray;
         try {
-            response = ServiceNowActions.getRecords(url, table, token, values, sLimit);
+            response = ServiceNowActions.getRecords(url, table, token, values, sLimit, query);
             Object obj = new JSONParser().parse(response);
             JSONObject json_resp = (JSONObject) obj;
             resultArray = (JSONArray) json_resp.get("result");

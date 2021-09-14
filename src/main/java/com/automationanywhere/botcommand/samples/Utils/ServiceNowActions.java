@@ -47,8 +47,8 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String getRecords(String url, String table, String token, List<Value> fields, String limit) {
-        url = url + "api/now/table/" + table + "?sysparm_fields=";
+    public static String getRecords(String url, String table, String token, List<Value> fields, String limit, String query) {
+        url = url + "api/now/table/" + table + "?sysparm_query=" + query + "sysparm_fields=";
         //add fields as query params
         if (fields != null && fields.size() > 0) {
             for (Value element : fields) {
@@ -219,7 +219,7 @@ public class ServiceNowActions {
             response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
         }
         catch(Exception e){
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
+            throw new BotCommandException("Something went wrong with the request. Please check your inputs and try again." + response);
         }
         return response;
     }

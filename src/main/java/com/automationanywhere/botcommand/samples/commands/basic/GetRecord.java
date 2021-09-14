@@ -46,7 +46,7 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
         //background_color =  "#293E40",
         return_label = "Assign output to a dictionary variable",
         return_type = DataType.DICTIONARY,
-        return_description = "Specify dictionary keys in entry list")
+        return_description = "Output Dictionary keys are specified in the entry list")
 
 public class GetRecord {
     @Sessions
@@ -74,7 +74,12 @@ public class GetRecord {
                     @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "ServiceNow response key")),
             })
             //Label you see at the top of the control
-            @Pkg(label = "Values to return in dictionary", description = "e.g. name: incident description, value: short_description")
+            @Pkg(label = "Values to return in dictionary", description = "The Output Dictionary Key specified above will be the key " +
+                    "used in the output Dictionary variable. The ServiceNow key needs to " +
+                    "be obtained from the API documentation for ServiceNow." +
+                    " e.g. Output Dictionary Key: 'description', value: 'short_description'" +
+                    " This will return the value at 'short_description' from the ServiceNow response" +
+                    " and write to the key 'description' in the output Dictionary variable")
             //Header of the entry form
             @EntryListLabel(value = "Provide entry")
             //Button label which displays the entry form

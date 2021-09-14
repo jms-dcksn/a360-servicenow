@@ -109,9 +109,16 @@ public final class GetRecordsCommand implements BotCommand {
       }
     }
 
+    if(parameters.containsKey("query") && parameters.get("query") != null && parameters.get("query").get() != null) {
+      convertedParameters.put("query", parameters.get("query").get());
+      if(convertedParameters.get("query") !=null && !(convertedParameters.get("query") instanceof String)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","query", "String", parameters.get("query").get().getClass().getSimpleName()));
+      }
+    }
+
     command.setSessionMap(sessionMap);
     try {
-      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(List<Value>)convertedParameters.get("values"),(Double)convertedParameters.get("limit")));
+      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(List<Value>)convertedParameters.get("values"),(Double)convertedParameters.get("limit"),(String)convertedParameters.get("query")));
       return logger.traceExit(result);
     }
     catch (ClassCastException e) {
