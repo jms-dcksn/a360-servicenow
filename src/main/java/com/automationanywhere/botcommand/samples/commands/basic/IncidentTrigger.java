@@ -1,6 +1,7 @@
 package com.automationanywhere.botcommand.samples.commands.basic;
 
 import com.automationanywhere.botcommand.data.Value;
+import com.automationanywhere.botcommand.data.impl.NumberValue;
 import com.automationanywhere.botcommand.data.impl.RecordValue;
 import com.automationanywhere.botcommand.data.impl.StringValue;
 import com.automationanywhere.botcommand.data.model.Schema;
@@ -40,7 +41,7 @@ import java.util.function.Consumer;
         name = "incidenttrigger",
         return_type = RECORD,
         return_name = "TriggerData",
-        return_description = "Available keys: triggerType, opened_at, number, description, sys_id")
+        return_description = "Available keys: triggerType, opened_at, number, description, sys_id, priority")
 
 public class IncidentTrigger {
     private ZonedDateTime lastRun;
@@ -125,7 +126,7 @@ public class IncidentTrigger {
                 String sys_id = time.get("sys_id").toString();
                 if(dt2.isAfter(lastRun) && incidentPriority <= intPriority){
                     lastRun = dt2;
-                    consumer.accept(getRecordValue(opened_at, number, description, sys_id));
+                    consumer.accept(getRecordValue(opened_at, number, description, sys_id, incidentPriority));
                     return;
                 } //else { lastRun = ZonedDateTime.now(); }
             }
@@ -134,7 +135,7 @@ public class IncidentTrigger {
         TIMER.schedule(timerTask, interval.longValue()*1000, interval.longValue()*1000);
     }
 
-    private RecordValue getRecordValue(String time, String number, String description, String sys_id) {
+    private RecordValue getRecordValue(String time, String number, String description, String sys_id, Integer incidentPriority) {
         List<Schema> schemas = new LinkedList<>();
         List<Value> values = new LinkedList<>();
         schemas.add(new Schema("triggerType"));
@@ -147,6 +148,8 @@ public class IncidentTrigger {
         values.add(new StringValue(description));
         schemas.add(new Schema("sys_id"));
         values.add(new StringValue(sys_id));
+        schemas.add(new Schema("priority"));
+        values.add(new NumberValue(incidentPriority));
 
         RecordValue recordValue = new RecordValue();
         recordValue.set(new Record(schemas,values));

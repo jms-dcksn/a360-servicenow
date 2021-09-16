@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210913-165721",
-    "codeVersion": "1.0.0-20210913-165721",
+    "packageVersion": "1.0.0-20210916-162133",
+    "codeVersion": "1.0.0-20210916-162133",
     "author": "",
     "commands": [
         {
