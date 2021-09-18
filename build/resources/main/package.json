@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210916-162133",
-    "codeVersion": "1.0.0-20210916-162133",
+    "packageVersion": "1.0.0-20210917-184356",
+    "codeVersion": "1.0.0-20210917-184356",
     "author": "",
     "commands": [
         {
@@ -841,7 +841,7 @@
             "returnSubtype": "UNDEFINED",
             "returnLabel": "",
             "returnRequired": false,
-            "returnDescription": "Available keys: triggerType, opened_at, number, description, sys_id",
+            "returnDescription": "Available keys: triggerType, opened_at, number, description, sys_id, priority",
             "returnName": "TriggerData",
             "attributes": [
                 {

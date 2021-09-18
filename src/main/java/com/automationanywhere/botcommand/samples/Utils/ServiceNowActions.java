@@ -48,7 +48,7 @@ public class ServiceNowActions {
     }
 
     public static String getRecords(String url, String table, String token, List<Value> fields, String limit, String query) {
-        url = url + "api/now/table/" + table + "?sysparm_query=" + query + "sysparm_fields=";
+        url = url + "api/now/table/" + table + "?sysparm_query=" + query + "&sysparm_fields=";
         //add fields as query params
         if (fields != null && fields.size() > 0) {
             for (Value element : fields) {
