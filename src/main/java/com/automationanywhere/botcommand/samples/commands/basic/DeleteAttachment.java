@@ -7,6 +7,7 @@ import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static com.automationanywhere.commandsdk.model.AttributeType.FILE;
@@ -39,14 +40,11 @@ public class DeleteAttachment {
             @NotEmpty String sessionName,
             @Idx(index = "2", type = TEXT) @Pkg(label = "Sys_Id", default_value_type = STRING, description = "Enter sys_id for the attachment")
             @NotEmpty String sys_id
-    ) throws ParseException {
+    ) throws ParseException, IOException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
         String result = ServiceNowActions.deleteAttachment(url, token, sys_id);
-        if (result.contains("An error occurred")){
-            throw new BotCommandException("Attachment was not found. Please check your input sys_id. " + result);
-        }
     }
     public void setSessionMap(Map<String, Object> sessionMap) {
         this.sessionMap = sessionMap;

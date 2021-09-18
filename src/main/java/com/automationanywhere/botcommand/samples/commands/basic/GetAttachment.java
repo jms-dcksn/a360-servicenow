@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static com.automationanywhere.commandsdk.model.AttributeType.FILE;
@@ -44,7 +45,7 @@ public class GetAttachment {
             @NotEmpty String sys_id,
             @Idx(index = "4", type = FILE) @Pkg(label = "Location and name to save attachment", description = "e.g. C:/Users/../Pictures/incident-screenshot.png")
             @NotEmpty String filePath
-    ) throws ParseException {
+    ) throws ParseException, IOException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();

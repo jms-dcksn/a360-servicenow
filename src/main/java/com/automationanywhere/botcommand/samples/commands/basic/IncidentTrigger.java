@@ -27,6 +27,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -107,7 +108,14 @@ public class IncidentTrigger {
 
             @Override
             public void run() {
-                String result = ServiceNowActions.triggerOnRecord(url, "incident", finalToken);
+                String result = null;
+                try {
+                    result = ServiceNowActions.triggerOnRecord(url, "incident", finalToken);
+                } catch (IOException e) {
+                    throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+                } catch (ParseException e) {
+                    throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+                }
                 Object obj = null;
                 try {
                     obj = new JSONParser().parse(result);

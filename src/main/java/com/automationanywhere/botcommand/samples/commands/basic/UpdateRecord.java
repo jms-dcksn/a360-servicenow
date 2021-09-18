@@ -91,11 +91,6 @@ public class UpdateRecord {
         response = ServiceNowActions.updateRecord(url, token, table, sys_id, values);
         Object obj = new JSONParser().parse(response);
         JSONObject json_resp = (JSONObject) obj;
-        if(json_resp.containsKey("error")){
-            JSONObject errorObject =  (JSONObject) json_resp.get("error");
-            errorMessage = errorObject.get("message").toString() + ", details: " + errorObject.get("detail").toString();
-            throw new BotCommandException("ServiceNow did not find the record at the specific sys_id. " + errorMessage);
-        }
         result = (JSONObject) json_resp.get("result");
         return new StringValue(result.get("sys_id").toString());
     }

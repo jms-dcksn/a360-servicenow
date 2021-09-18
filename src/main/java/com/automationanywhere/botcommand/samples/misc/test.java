@@ -33,10 +33,10 @@ public class test {
         String clientSecret = ",|cblfsVD}";
         String username = "admin";
         String password = "AYdIg7w1dXKv";
-        String table = "incident";
-        String name = "timestamp";
+        String table = "incint";
+        String name = "opened";
         String value = "opened_at";
-        String sys_id = "e8caedcbc0a80164017df472f39eaed1";
+        String sys_id = "be15299b1b2230104b74bcb30";
         String filePath = "C:\\Users\\jamesdickson\\Pictures\\thumbnail2.png";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
@@ -50,7 +50,6 @@ public class test {
         //url = url + "api/now/table/incident/" + sys_id;
 
         //String method = "GET";
-        ZonedDateTime lastRun = ZonedDateTime.now();
 
         String response = HTTPRequest.oAuthMethod(url, clientId, clientSecret, username, password);
         Object obj = new JSONParser().parse(response);
@@ -60,31 +59,10 @@ public class test {
 
 
 
-        String lastIncident = ServiceNowActions.watchIncident(url, token, sys_id);
-        System.out.println(lastIncident);
-        Object obj2;
-        try {
-            obj2 = new JSONParser().parse(lastIncident);
-        } catch (ParseException e) {
-            throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
-        }
-        JSONObject json_obj = (JSONObject) obj2;
-        JSONObject json_result = (JSONObject) json_obj.get("result");
-        String sys_updated_on = (String) json_result.get("sys_updated_on");
-        ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")));
-        String description = json_result.get("short_description").toString();
-        String updated_by = json_result.get("sys_updated_by").toString();
-        String comments = json_result.get("comments").toString();
-        String[] arrOfStr = comments.split("\\n");
-        String comment = arrOfStr[1];
-        System.out.println(comment);
-        System.out.println(sys_updated_on);
-        System.out.println(updated_by);
-        System.out.println(description);
-        if(dt2.isAfter(lastRun)) {
-            System.out.println("Triggered");
-        } else { System.out.println("Not triggered"); }
+        String update = ServiceNowActions.getRecord(url, table, sys_id, token, list);
+        System.out.println(update);
+
+
         //String records = ServiceNowActions.getRecords(url, table, token, list, "");
         //System.out.println(records);
 

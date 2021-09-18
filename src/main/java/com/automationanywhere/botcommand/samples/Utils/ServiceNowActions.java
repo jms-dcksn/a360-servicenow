@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ServiceNowActions {
 
-    public static String getRecord(String url, String table, String sys_id, String token, List<Value> fields) {
+    public static String getRecord(String url, String table, String sys_id, String token, List<Value> fields) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id + "?sysparm_fields=";
 
         if (fields != null && fields.size() > 0) {
@@ -32,22 +32,14 @@ public class ServiceNowActions {
             //remove last comma
             url = url.substring(0, url.length() - 3);
         }
-
         String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.Request(url, method, auth);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        } catch (Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+        response = HTTPRequest.Request(url, method, auth);
         return response;
     }
 
-    public static String getRecords(String url, String table, String token, List<Value> fields, String limit, String query) {
+    public static String getRecords(String url, String table, String token, List<Value> fields, String limit, String query) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "?sysparm_query=" + query + "&sysparm_fields=";
         //add fields as query params
         if (fields != null && fields.size() > 0) {
@@ -61,58 +53,39 @@ public class ServiceNowActions {
             //remove last comma
             url = url.substring(0, url.length() - 3);
         }
-
         url = url + "&sysparm_limit=" + limit; //add record limit as query param
-
         String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.Request(url, method, auth);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        } catch (Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+        response = HTTPRequest.Request(url, method, auth);
         return response;
     }
 
-    public static String triggerOnRecord(String url, String table, String token) {
+    public static String triggerOnRecord(String url, String table, String token) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description,sys_id&sysparm_limit=1";
         //add fields as query params
         String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.Request(url, method, auth);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        } catch (Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+
+        response = HTTPRequest.Request(url, method, auth);
+
         return response;
     }
 
-    public static String watchIncident(String url, String token, String sys_id) {
+    public static String watchIncident(String url, String token, String sys_id) throws IOException, ParseException {
         url = url + "api/now/table/incident/" + sys_id + "?sysparm_fields=sys_updated_on,sys_updated_by,short_description,comments&sysparm_display_value=true";
         //add fields as query params
         String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.Request(url, method, auth);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        } catch (Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+
+        response = HTTPRequest.Request(url, method, auth);
+
         return response;
     }
 
-    public static String insertRecord(String url, String table, String token, List<Value> fields){
+    public static String insertRecord(String url, String table, String token, List<Value> fields) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "?sysparm_fields=sys_id";
         JSONObject jsonBody = new JSONObject();
 
@@ -128,19 +101,11 @@ public class ServiceNowActions {
         }
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.SEND(auth, url, "POST", jsonBody.toString());
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        }
-        catch(Exception e){
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+        response = HTTPRequest.SEND(auth, url, "POST", jsonBody.toString());
         return response;
     }
 
-    public static String modifyRecord(String url, String method, String table, String sys_id, String token, List<Value> fields){
+    public static String modifyRecord(String url, String method, String table, String sys_id, String token, List<Value> fields) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id;
         JSONObject jsonBody = new JSONObject();
 
@@ -156,19 +121,12 @@ public class ServiceNowActions {
         }
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.SEND(auth, url, method, jsonBody.toString());
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
-        }
-        catch(Exception e){
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+
+        response = HTTPRequest.SEND(auth, url, method, jsonBody.toString());
         return response;
     }
 
-    public static String updateRecord(String url, String token, String table, String sys_id, List<Value> list) throws IOException {
+    public static String updateRecord(String url, String token, String table, String sys_id, List<Value> list) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id;
         JSONObject jsonBody = new JSONObject();
 
@@ -182,14 +140,10 @@ public class ServiceNowActions {
                 }
             }
         }
-        System.out.println(jsonBody);
+
         String auth = "Bearer " + token;
         String response = "";
-
         response = HTTPRequest.httpPatch(url, auth, jsonBody.toString());
-        if (response.contains("error")) {
-            throw new BotCommandException(response);
-        }
         return response;
     }
 
@@ -200,9 +154,6 @@ public class ServiceNowActions {
         String response = "";
         try {
             response = HTTPRequest.Request(url, "DELETE", auth);
-            if (response.contains("An error occurred")) {
-                throw new BotCommandException(response);
-            }
         }
         catch(Exception e){
             throw new BotCommandException("Something went wrong with the request. Please try again." + response);
@@ -210,44 +161,37 @@ public class ServiceNowActions {
         return "Record deleted";
     }
 
-    public static String addAttachment(String url, String table, String token, String sys_id, String filePath){
+    public static String addAttachment(String url, String table, String token, String sys_id, String filePath) throws IOException, ParseException {
         url = url + "api/now/attachment/upload";
         //JSONObject jsonBody = new JSONObject();
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
-        }
-        catch(Exception e){
-            throw new BotCommandException("Something went wrong with the request. Please check your inputs and try again." + response);
-        }
+
+        response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
+
         return response;
     }
 
-    public static void downloadAttachment(String url, String token, String sys_id, String filePath){
+    public static void downloadAttachment(String url, String token, String sys_id, String filePath) throws IOException {
         url = url + "api/now/attachment/" + sys_id + "/file";
         //JSONObject jsonBody = new JSONObject();
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            HTTPRequest.getFile(url, auth, filePath);
-        }
-        catch(Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+
+        HTTPRequest.getFile(url, auth, filePath);
+
+
     }
 
-    public static String deleteAttachment(String url, String token, String sys_id){
+    public static String deleteAttachment(String url, String token, String sys_id) throws IOException, ParseException {
         url = url + "api/now/attachment/" + sys_id;
         //JSONObject jsonBody = new JSONObject();
         String auth = "Bearer " + token;
         String response = "";
-        try {
-            response = HTTPRequest.Request(url, "DELETE", auth);
-        }
-        catch(Exception e) {
-            throw new BotCommandException("Something went wrong with the request. Please try again." + response);
-        }
+
+        response = HTTPRequest.Request(url, "DELETE", auth);
+
+
         return response;
     }
 }

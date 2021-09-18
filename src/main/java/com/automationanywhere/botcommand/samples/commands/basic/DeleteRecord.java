@@ -55,11 +55,7 @@ public class DeleteRecord {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
-        try {
-            ServiceNowActions.deleteRecord(url, table, token, sys_id);
-        } catch(Exception e){
-            throw new BotCommandException("ServiceNow didn't accept the request. Exception caught " + e);
-        }
+        ServiceNowActions.deleteRecord(url, table, token, sys_id);
     }
     public void setSessionMap(Map<String, Object> sessionMap) {
         this.sessionMap = sessionMap;

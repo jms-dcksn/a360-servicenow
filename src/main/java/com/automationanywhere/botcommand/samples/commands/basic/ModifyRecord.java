@@ -87,7 +87,7 @@ public class ModifyRecord {
         String response = "";
         JSONObject result;
         try {
-            response = ServiceNowActions.modifyRecord(url, "POST", table, sys_id, token, values);
+            response = ServiceNowActions.modifyRecord(url, "PUT", table, sys_id, token, values);
             Object obj = new JSONParser().parse(response);
             JSONObject json_resp = (JSONObject) obj;
             result = (JSONObject) json_resp.get("result");

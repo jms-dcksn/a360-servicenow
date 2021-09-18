@@ -20,6 +20,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -94,7 +95,14 @@ public class WatchIncident {
 
             @Override
             public void run() {
-                String result = ServiceNowActions.watchIncident(url, finalToken, sys_id);
+                String result = null;
+                try {
+                    result = ServiceNowActions.watchIncident(url, finalToken, sys_id);
+                } catch (IOException e) {
+                    throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+                } catch (ParseException e) {
+                    throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+                }
                 Object obj = null;
                 try {
                     obj = new JSONParser().parse(result);

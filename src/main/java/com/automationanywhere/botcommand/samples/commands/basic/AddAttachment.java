@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -71,8 +72,8 @@ public class AddAttachment {
             response = ServiceNowActions.addAttachment(url, table, token, sys_id, filePath);
             Object obj = new JSONParser().parse(response);
             json_resp = (JSONObject) obj;
-        } catch (ParseException e) {
-            throw new BotCommandException("ServiceNow could not complete the request. Please check your inputs. " + errorMessage);
+        } catch (ParseException | IOException e) {
+            throw new BotCommandException("ServiceNow could not complete the request. Please check your inputs.");
         }
         if (json_resp.containsKey("error")) {
             JSONObject errorObject =  (JSONObject) json_resp.get("error");
@@ -80,7 +81,6 @@ public class AddAttachment {
             throw new BotCommandException("ServiceNow did not find the record at the specific sys_id. " + errorMessage);
         }
         result = (JSONObject) json_resp.get("result");
-
         return new StringValue(result.get("sys_id").toString());
     }
     public void setSessionMap(Map<String, Object> sessionMap) {
