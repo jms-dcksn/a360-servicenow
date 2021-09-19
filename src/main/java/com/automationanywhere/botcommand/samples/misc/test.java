@@ -36,8 +36,8 @@ public class test {
         String table = "incint";
         String name = "opened";
         String value = "opened_at";
-        String sys_id = "be15299b1b2230104b74bcb30";
-        String filePath = "C:\\Users\\jamesdickson\\Pictures\\thumbnail2.png";
+        String sys_id = "4323007f1b6230104b7a0f26624bcb57";
+        String filePath = "C:\\Users\\jamesdickson\\Pictures\\downloaded-attachment.png";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
         //String sLimit = iLimit.toString();
@@ -59,8 +59,8 @@ public class test {
 
 
 
-        String update = ServiceNowActions.getRecord(url, table, sys_id, token, list);
-        System.out.println(update);
+        ServiceNowActions.downloadAttachment(url, token, sys_id, filePath);
+        //System.out.println(update);
 
 
         //String records = ServiceNowActions.getRecords(url, table, token, list, "");

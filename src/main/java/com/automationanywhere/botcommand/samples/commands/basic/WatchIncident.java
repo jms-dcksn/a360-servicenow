@@ -64,7 +64,12 @@ public class WatchIncident {
             @Idx(index = "4", type = CREDENTIAL) @Pkg(label = "User Name") @NotEmpty SecureString username,
             @Idx(index = "5", type = CREDENTIAL) @Pkg(label = "Password") @NotEmpty SecureString password,
             @Idx(index = "6", type = TEXT) @Pkg(label = "Sys_id of incident to watch") @NotEmpty String sys_id,
-            @Idx(index = "7", type = AttributeType.NUMBER)
+            @Idx(index = "7", type = TEXT) @Pkg(label = "ServiceNow System Time Zone", default_value = "America/Los_Angeles",
+                    default_value_type = STRING, description = "Refer to ServiceNow documentation " +
+                    "(https://docs.servicenow.com/bundle/rome-platform-administration/page/administer/time/reference/r_TimeZones.html) " +
+                    "for available time zones and the correct syntax. Enter time zone exactly as displayed" +
+                    " in the documentation. e.g. For Pacific Time, enter 'America/Los_Angeles'") @NotEmpty String zone,
+            @Idx(index = "8", type = AttributeType.NUMBER)
             @Pkg(label = "Please provide the interval to trigger in seconds", default_value = "120", default_value_type = DataType.NUMBER,
             description = "Interval should not be less than 30 seconds.")
             @GreaterThan("29")
@@ -113,7 +118,7 @@ public class WatchIncident {
                 JSONObject json_result = (JSONObject) json_obj.get("result");
                 String sys_updated_on = (String) json_result.get("sys_updated_on");
                 ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")));
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of(zone)));
                 String description = json_result.get("short_description").toString();
                 String updated_by = json_result.get("sys_updated_by").toString();
                 String comments = json_result.get("comments").toString();

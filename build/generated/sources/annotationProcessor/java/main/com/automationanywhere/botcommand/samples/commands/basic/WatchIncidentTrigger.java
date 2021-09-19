@@ -106,6 +106,16 @@ public class WatchIncidentTrigger implements Trigger3 {
       throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","sys_id"));
     }
 
+    if(parameters.containsKey("zone") && parameters.get("zone") != null && parameters.get("zone").get() != null) {
+      convertedParameters.put("zone", parameters.get("zone").get());
+      if(convertedParameters.get("zone") !=null && !(convertedParameters.get("zone") instanceof String)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","zone", "String", parameters.get("zone").get().getClass().getSimpleName()));
+      }
+    }
+    if(convertedParameters.get("zone") == null) {
+      throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","zone"));
+    }
+
     if(parameters.containsKey("interval") && parameters.get("interval") != null && parameters.get("interval").get() != null) {
       convertedParameters.put("interval", parameters.get("interval").get());
       if(convertedParameters.get("interval") !=null && !(convertedParameters.get("interval") instanceof Double)) {
@@ -135,7 +145,7 @@ public class WatchIncidentTrigger implements Trigger3 {
     command.setConsumer(triggerListenerContext.getEventCallback());
     command.setTriggerUid(triggerListenerContext.getTriggerUid());
     try {
-      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("sys_id"),(Double)convertedParameters.get("interval"));}
+      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("sys_id"),(String)convertedParameters.get("zone"),(Double)convertedParameters.get("interval"));}
     catch (ClassCastException e) {
       throw new TriggerException(MESSAGES_GENERIC.getString("generic.IllegalParameters","startTrigger"));
     }

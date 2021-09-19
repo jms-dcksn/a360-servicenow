@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210918-154236",
-    "codeVersion": "1.0.0-20210918-154236",
+    "packageVersion": "1.0.0-20210919-120048",
+    "codeVersion": "1.0.0-20210919-120048",
     "author": "",
     "commands": [
         {
@@ -1024,6 +1024,21 @@
                     "name": "sys_id",
                     "label": "Sys_id of incident to watch",
                     "type": "TEXT",
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        }
+                    ]
+                },
+                {
+                    "name": "zone",
+                    "label": "ServiceNow System Time Zone",
+                    "description": "Refer to ServiceNow documentation (https://docs.servicenow.com/bundle/rome-platform-administration/page/administer/time/reference/r_TimeZones.html) for available time zones and the correct syntax. Enter time zone exactly as displayed in the documentation. e.g. For Pacific Time, enter 'America/Los_Angeles'",
+                    "type": "TEXT",
+                    "defaultValue": {
+                        "string": "America/Los_Angeles",
+                        "type": "STRING"
+                    },
                     "rules": [
                         {
                             "name": "NOT_EMPTY"
