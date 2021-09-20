@@ -62,7 +62,7 @@ public class ServiceNowActions {
     }
 
     public static String triggerOnRecord(String url, String table, String token) throws IOException, ParseException {
-        url = url + "api/now/table/" + table + "?sysparm_query=sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description,sys_id&sysparm_limit=1";
+        url = url + "api/now/table/" + table + "?sysparm_query=active=true^ORDERBYDESCopened_at&sysparm_fields=opened_at,priority,number,short_description,sys_id&sysparm_limit=1";
         //add fields as query params
         String method = "GET";
         String auth = "Bearer " + token;
@@ -160,7 +160,13 @@ public class ServiceNowActions {
         }
         return "Record deleted";
     }
-
+    public static String getAttachmentDetails(String url, String sys_id, String token) throws IOException, ParseException {
+        url = url + "api/now/attachment/" + sys_id;
+        String method = "GET";
+        String auth = "Basic " + token;
+        String response =  HTTPRequest.Request (url,method,auth);
+        return response;
+    }
     public static String addAttachment(String url, String table, String token, String sys_id, String filePath) throws IOException, ParseException {
         url = url + "api/now/attachment/upload";
         //JSONObject jsonBody = new JSONObject();
