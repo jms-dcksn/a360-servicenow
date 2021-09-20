@@ -54,19 +54,19 @@ public final class GetAttachmentCommand implements BotCommand {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","sys_id"));
     }
 
-    if(parameters.containsKey("filePath") && parameters.get("filePath") != null && parameters.get("filePath").get() != null) {
-      convertedParameters.put("filePath", parameters.get("filePath").get());
-      if(convertedParameters.get("filePath") !=null && !(convertedParameters.get("filePath") instanceof String)) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","filePath", "String", parameters.get("filePath").get().getClass().getSimpleName()));
+    if(parameters.containsKey("folderPath") && parameters.get("folderPath") != null && parameters.get("folderPath").get() != null) {
+      convertedParameters.put("folderPath", parameters.get("folderPath").get());
+      if(convertedParameters.get("folderPath") !=null && !(convertedParameters.get("folderPath") instanceof String)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","folderPath", "String", parameters.get("folderPath").get().getClass().getSimpleName()));
       }
     }
-    if(convertedParameters.get("filePath") == null) {
-      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","filePath"));
+    if(convertedParameters.get("folderPath") == null) {
+      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","folderPath"));
     }
 
     command.setSessionMap(sessionMap);
     try {
-      command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("sys_id"),(String)convertedParameters.get("filePath"));Optional<Value> result = Optional.empty();
+      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("sys_id"),(String)convertedParameters.get("folderPath")));
       return logger.traceExit(result);
     }
     catch (ClassCastException e) {

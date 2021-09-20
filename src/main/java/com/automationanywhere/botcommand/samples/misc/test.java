@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -37,7 +38,7 @@ public class test {
         String name = "opened";
         String value = "opened_at";
         String sys_id = "4323007f1b6230104b7a0f26624bcb57";
-        String filePath = "C:\\Users\\jamesdickson\\Pictures\\downloaded-attachment.png";
+        String folderPath = "C:\\Users\\jamesdickson\\Pictures\\";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
         //String sLimit = iLimit.toString();
@@ -59,6 +60,13 @@ public class test {
 
 
 
+        String attachmentDetails= ServiceNowActions.getAttachmentDetails(url,sys_id,token);
+        Object obj2 = new JSONParser().parse(attachmentDetails);
+        JSONObject json_resp = (JSONObject) obj2;
+        JSONObject result = (JSONObject) json_resp.get("result");
+        String filename = (String) result.get("file_name");
+
+        String filePath = Paths.get(folderPath+"\\"+filename).toString();
         ServiceNowActions.downloadAttachment(url, token, sys_id, filePath);
         //System.out.println(update);
 

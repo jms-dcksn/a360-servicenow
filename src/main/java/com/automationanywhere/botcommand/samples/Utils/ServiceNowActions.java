@@ -160,13 +160,15 @@ public class ServiceNowActions {
         }
         return "Record deleted";
     }
+
     public static String getAttachmentDetails(String url, String sys_id, String token) throws IOException, ParseException {
         url = url + "api/now/attachment/" + sys_id;
         String method = "GET";
-        String auth = "Basic " + token;
+        String auth = "Bearer " + token;
         String response =  HTTPRequest.Request (url,method,auth);
         return response;
     }
+
     public static String addAttachment(String url, String table, String token, String sys_id, String filePath) throws IOException, ParseException {
         url = url + "api/now/attachment/upload";
         //JSONObject jsonBody = new JSONObject();
