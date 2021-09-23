@@ -119,12 +119,15 @@ public class WatchIncident {
                 String sys_updated_on = (String) json_result.get("sys_updated_on");
                 ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of(zone)));
-                String description = json_result.get("short_description").toString();
-                String updated_by = json_result.get("sys_updated_by").toString();
-                String comments = json_result.get("comments").toString();
-                String[] arrOfStr = comments.split("\\n");
-                String comment = arrOfStr[1];
                 if(dt2.isAfter(lastRun)){
+                    String comment;
+                    String description = json_result.get("short_description").toString();
+                    String updated_by = json_result.get("sys_updated_by").toString();
+                    if(!Objects.equals(json_result.get("comments").toString(), "")) {
+                        String comments = json_result.get("comments").toString();
+                        String[] arrOfStr = comments.split("\\n");
+                        comment = arrOfStr[1];
+                    } else {comment = "No comments exist on incident";}
                     lastRun = dt2;
                     consumer.accept(getRecordValue(sys_updated_on, updated_by, description, comment));
                     return;

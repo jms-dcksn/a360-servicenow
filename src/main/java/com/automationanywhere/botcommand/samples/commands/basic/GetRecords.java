@@ -12,7 +12,9 @@ import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListAd
 import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListEmptyLabel;
 import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListEntryUnique;
 import com.automationanywhere.commandsdk.annotations.rules.EntryList.EntryListLabel;
+import com.automationanywhere.commandsdk.annotations.rules.GreaterThan;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
+import com.automationanywhere.commandsdk.annotations.rules.NumberInteger;
 import com.automationanywhere.commandsdk.model.AttributeType;
 import com.automationanywhere.commandsdk.model.DataType;
 import org.json.simple.JSONArray;
@@ -90,6 +92,8 @@ public class GetRecords {
                     List<Value> values,
             @Idx(index = "4", type = AttributeType.NUMBER) @Pkg(label = "Limit", default_value_type = DataType.NUMBER,
                     description = "Limits the total number of records returned")
+            @GreaterThan("0")
+            @NumberInteger
             Double limit,
             @Idx(index = "5", type = TEXT) @Pkg(label = "Encoded Query String (i.e. sysparm_query)", default_value_type = STRING,
             description = "Encoded query string can be obtained by copying from a list filter in ServiceNow. Please see " +

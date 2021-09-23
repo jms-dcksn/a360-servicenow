@@ -11,15 +11,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class test {
@@ -37,7 +35,7 @@ public class test {
         String table = "incint";
         String name = "opened";
         String value = "opened_at";
-        String sys_id = "4323007f1b6230104b7a0f26624bcb57";
+        String sys_id = "9b7bf4591b3230104b7a0f26624bcb2d";
         String folderPath = "C:\\Users\\jamesdickson\\Pictures\\";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
@@ -59,16 +57,38 @@ public class test {
         String errorMessage = "";
 
 
+        String result;
+        try {
+            result = ServiceNowActions.watchIncident(url, token, sys_id);
+        } catch (IOException e) {
+            throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+        } catch (ParseException e) {
+            throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+        }
+        Object obj2 = null;
+        try {
+            obj2 = new JSONParser().parse(result);
+        } catch (ParseException e) {
+            throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
+        }
+        JSONObject json_obj = (JSONObject) obj2;
+        JSONObject json_result = (JSONObject) json_obj.get("result");
+        String sys_updated_on = (String) json_result.get("sys_updated_on");
+        ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("America/Los_Angeles")));
+        System.out.println(dt2);
 
-        String attachmentDetails= ServiceNowActions.getAttachmentDetails(url,sys_id,token);
-        Object obj2 = new JSONParser().parse(attachmentDetails);
-        JSONObject json_resp = (JSONObject) obj2;
-        JSONObject result = (JSONObject) json_resp.get("result");
-        String filename = (String) result.get("file_name");
+        String comment;
+        System.out.println(json_result.get("comments"));
+        String description = json_result.get("short_description").toString();
+        String updated_by = json_result.get("sys_updated_by").toString();
+        if(!Objects.equals(json_result.get("comments").toString(), "")) {
+            String comments = json_result.get("comments").toString();
+            String[] arrOfStr = comments.split("\\n");
+            comment = arrOfStr[1];
+        } else {comment = "No comments exist on incident";}
 
-        String filePath = Paths.get(folderPath+"\\"+filename).toString();
-        ServiceNowActions.downloadAttachment(url, token, sys_id, filePath);
-        //System.out.println(update);
+        System.out.println(comment);
 
 
         //String records = ServiceNowActions.getRecords(url, table, token, list, "");

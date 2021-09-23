@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210919-120048",
-    "codeVersion": "1.0.0-20210919-120048",
+    "packageVersion": "1.0.0-20210923-130455",
+    "codeVersion": "1.0.0-20210923-130455",
     "author": "",
     "commands": [
         {
@@ -276,6 +276,11 @@
             "groupLabel": "Attachments",
             "icon": "snow.svg",
             "comment": true,
+            "returnType": "STRING",
+            "returnSubtype": "UNDEFINED",
+            "returnLabel": "Assign File Name to String",
+            "returnRequired": false,
+            "returnDescription": "Outputs the name of the downloaded file in a string variable",
             "attributes": [
                 {
                     "name": "sessionName",
@@ -303,13 +308,16 @@
                     ]
                 },
                 {
-                    "name": "filePath",
-                    "label": "Location and name to save attachment",
-                    "description": "e.g. C:/Users/../Pictures/incident-screenshot.png",
-                    "type": "FILE",
+                    "name": "folderPath",
+                    "label": "Enter download folder location",
+                    "description": "e.g. C:\\Users\\...\\attachment-download-folder",
+                    "type": "TEXT",
                     "rules": [
                         {
                             "name": "NOT_EMPTY"
+                        },
+                        {
+                            "name": "FILE_FOLDER"
                         }
                     ]
                 }
@@ -515,7 +523,16 @@
                     "name": "limit",
                     "label": "Limit",
                     "description": "Limits the total number of records returned",
-                    "type": "NUMBER"
+                    "type": "NUMBER",
+                    "rules": [
+                        {
+                            "name": "GREATER_THAN",
+                            "value": "0"
+                        },
+                        {
+                            "name": "NUMBER_INTEGER"
+                        }
+                    ]
                 },
                 {
                     "name": "query",

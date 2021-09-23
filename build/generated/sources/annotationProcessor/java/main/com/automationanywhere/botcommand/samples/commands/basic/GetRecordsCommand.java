@@ -10,6 +10,7 @@ import com.automationanywhere.commandsdk.i18n.MessagesFactory;
 import java.lang.ClassCastException;
 import java.lang.Deprecated;
 import java.lang.Double;
+import java.lang.NullPointerException;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.Throwable;
@@ -108,7 +109,23 @@ public final class GetRecordsCommand implements BotCommand {
         throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","limit", "Double", parameters.get("limit").get().getClass().getSimpleName()));
       }
     }
+    if(convertedParameters.containsKey("limit")) {
+      try {
+        if(convertedParameters.get("limit") != null && !((double)convertedParameters.get("limit") > 0)) {
+          throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.GreaterThan","limit", "0"));
+        }
+      }
+      catch(ClassCastException e) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","limit", "Number", convertedParameters.get("limit").getClass().getSimpleName()));
+      }
+      catch(NullPointerException e) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","limit"));
+      }
+      if(convertedParameters.get("limit")!=null && !(convertedParameters.get("limit") instanceof Number)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","limit", "Number", convertedParameters.get("limit").getClass().getSimpleName()));
+      }
 
+    }
     if(parameters.containsKey("query") && parameters.get("query") != null && parameters.get("query").get() != null) {
       convertedParameters.put("query", parameters.get("query").get());
       if(convertedParameters.get("query") !=null && !(convertedParameters.get("query") instanceof String)) {
