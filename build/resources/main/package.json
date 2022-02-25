@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.0.0-20210923-130455",
-    "codeVersion": "1.0.0-20210923-130455",
+    "packageVersion": "1.1.0-20220225-164937",
+    "codeVersion": "1.1.0-20220225-164937",
     "author": "",
     "commands": [
         {
@@ -103,7 +103,7 @@
             "name": "startSnowSession",
             "label": "Start Session",
             "description": "Starts Session with OAuth Credentials",
-            "nodeLabel": "Start Session {{sessionName}}",
+            "nodeLabel": "Start Session {{name}}",
             "minimumControlRoomVersion": "8750",
             "minimumBotAgentVersion": "20.11",
             "mainClass": "com.automationanywhere.botcommand.samples.commands.basic.A_StartSessionCommand",
@@ -793,54 +793,9 @@
                 },
                 {
                     "name": "values",
-                    "label": "Values to update in record",
-                    "description": "Use this action to add updates to a record, such as comments. e.g. key: comments, value: Please try to reboot your computer",
-                    "type": "ENTRYLIST",
-                    "rules": [
-                        {
-                            "name": "ENTRYLIST_ADD_LABEL",
-                            "value": "Add entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_EMPTY_LABEL",
-                            "value": "No values to return"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_LABEL",
-                            "value": "Provide entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_UNIQUE",
-                            "value": "NAME"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "name": "NAME",
-                            "label": "ServiceNow key"
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value"
-                        }
-                    ],
-                    "attributes": [
-                        {
-                            "name": "NAME",
-                            "label": "Name",
-                            "type": "TEXT",
-                            "rules": [
-                                {
-                                    "name": "NOT_EMPTY"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value",
-                            "type": "TEXT"
-                        }
-                    ]
+                    "label": "Values to update in record. Use this action to add updates to a record, such as comments.",
+                    "description": "Ensure the dictionary value is wrapped in quotations. e.g. dictionary key: comments, dictionary value: \"Please try to reboot your computer.\" Ensure the dictionary key matches a ServiceNow key from the Table API",
+                    "type": "DICTIONARY"
                 }
             ]
         }

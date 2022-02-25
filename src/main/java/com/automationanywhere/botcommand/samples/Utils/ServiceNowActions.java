@@ -11,10 +11,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ServiceNowActions {
 
@@ -126,24 +123,22 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String updateRecord(String url, String token, String table, String sys_id, List<Value> list) throws IOException, ParseException {
+    public static String updateRecord(String url, String token, String table, String sys_id, Map<String, StringValue> values) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id;
-        JSONObject jsonBody = new JSONObject();
 
-        if(list!=null && list.size()>0){
-            for (Value element : list){
-                Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
-                String name = customValuesMap.containsKey("NAME") ? ((StringValue)customValuesMap.get("NAME")).get() : "";
-                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue)customValuesMap.get("VALUE")).get();
-                if(!value.equals(null)){
-                    jsonBody.put(name, value);
-                }
-            }
+        StringBuilder jsonBodyStr = new StringBuilder("{");
+        for (Map.Entry<String,StringValue> entry : values.entrySet()){
+            String currentValue = String.valueOf(entry.getValue().get());
+            jsonBodyStr.append("\"").append(entry.getKey()).append("\": \"").append(currentValue).append("\",");
         }
+        jsonBodyStr = new StringBuilder(jsonBodyStr.substring(0, jsonBodyStr.length() - 1)); //remove last comma
+        jsonBodyStr.append("}");
 
+        //JSONObject jsonBody = new JSONObject();
+        //jsonBody.putAll(values);
         String auth = "Bearer " + token;
         String response = "";
-        response = HTTPRequest.httpPatch(url, auth, jsonBody.toString());
+        response = HTTPRequest.httpPatch(url, auth, String.valueOf(jsonBodyStr));
         return response;
     }
 

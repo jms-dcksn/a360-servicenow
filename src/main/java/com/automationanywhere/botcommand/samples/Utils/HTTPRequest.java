@@ -54,12 +54,14 @@ public class HTTPRequest {
 
 
     public static String oAuthMethod(String url, String clientId, String clientSecret, String username, String password) throws IOException, ParseException {
+        String encodedCS = URLEncoder.encode(clientSecret, StandardCharsets.UTF_8.toString());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "grant_type=password&client_id=" + clientId + "&client_secret=" + clientSecret + "&username=" + username + "&password=" + password);
+        RequestBody body = RequestBody.create(mediaType, "grant_type=password&client_id="+ clientId + "&client_secret=" +
+                encodedCS + "&username=" + username + "&password=" + password);
         Request request = new Request.Builder()
-                .url(url+"oauth_token.do")
+                .url(url + "oauth_token.do")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();

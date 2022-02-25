@@ -43,7 +43,7 @@ import org.json.simple.parser.ParseException;
 		description = "Starts Session with OAuth Credentials",
 		icon = "snow.svg",
 		name = "startSnowSession",
-		node_label = "Start Session {{sessionName}}",
+		node_label = "Start Session {{name}}",
 		group_label="Admin",
 		comment = true
 		//text_color = "#7B848B" ,

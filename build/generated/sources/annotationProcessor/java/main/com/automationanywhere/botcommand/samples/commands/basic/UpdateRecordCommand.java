@@ -3,7 +3,7 @@ package com.automationanywhere.botcommand.samples.commands.basic;
 import com.automationanywhere.bot.service.GlobalSessionContext;
 import com.automationanywhere.botcommand.BotCommand;
 import com.automationanywhere.botcommand.data.Value;
-import com.automationanywhere.botcommand.data.impl.DictionaryValue;
+import com.automationanywhere.botcommand.data.impl.StringValue;
 import com.automationanywhere.botcommand.exception.BotCommandException;
 import com.automationanywhere.commandsdk.i18n.Messages;
 import com.automationanywhere.commandsdk.i18n.MessagesFactory;
@@ -14,8 +14,6 @@ import java.lang.String;
 import java.lang.Throwable;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,51 +67,14 @@ public final class UpdateRecordCommand implements BotCommand {
 
     if(parameters.containsKey("values") && parameters.get("values") != null && parameters.get("values").get() != null) {
       convertedParameters.put("values", parameters.get("values").get());
-      if(convertedParameters.get("values") !=null && !(convertedParameters.get("values") instanceof List)) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","values", "List", parameters.get("values").get().getClass().getSimpleName()));
+      if(convertedParameters.get("values") !=null && !(convertedParameters.get("values") instanceof Map)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","values", "Map", parameters.get("values").get().getClass().getSimpleName()));
       }
     }
-    if(convertedParameters.containsKey("values")) {
-      try {
-        List<Value> entryList = (List<Value>)convertedParameters.get("values");
-        for(Value element:entryList)  {
-          DictionaryValue dictionaryValue=(DictionaryValue)element;
-          Map<String,Value> valueMap=dictionaryValue.get();
-          HashSet<Value> uniqueValueSet=new HashSet() ;
-          for (Map.Entry<String,Value> entry: valueMap.entrySet()) {
-            if(entry.getKey().equals("NAME")  && uniqueValueSet.contains(entry.getValue()))  {
-              throw new BotCommandException(MESSAGES_GENERIC.getString("entrylist.duplicate.rows.added","NAME"));
-            }
-            else if (entry.getKey().equals("NAME"))  {
-              uniqueValueSet.add(entry.getValue());
-            }
-          }
-        }
-      }
-      catch(ClassCastException e) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","values", "List<Value>",convertedParameters.get("values").getClass().getSimpleName()));
-      }
 
-
-      if(parameters.containsKey("NAME") && parameters.get("NAME") != null && parameters.get("NAME").get() != null) {
-        convertedParameters.put("NAME", parameters.get("NAME").get());
-        if(convertedParameters.get("NAME") !=null && !(convertedParameters.get("NAME") instanceof String)) {
-          throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","NAME", "String", parameters.get("NAME").get().getClass().getSimpleName()));
-        }
-      }
-
-      if(parameters.containsKey("VALUE") && parameters.get("VALUE") != null && parameters.get("VALUE").get() != null) {
-        convertedParameters.put("VALUE", parameters.get("VALUE").get());
-        if(convertedParameters.get("VALUE") !=null && !(convertedParameters.get("VALUE") instanceof String)) {
-          throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","VALUE", "String", parameters.get("VALUE").get().getClass().getSimpleName()));
-        }
-      }
-
-
-    }
     command.setSessionMap(sessionMap);
     try {
-      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(String)convertedParameters.get("sys_id"),(List<Value>)convertedParameters.get("values")));
+      Optional<Value> result =  Optional.ofNullable(command.action((String)convertedParameters.get("sessionName"),(String)convertedParameters.get("table"),(String)convertedParameters.get("sys_id"),(Map<String, StringValue>)convertedParameters.get("values")));
       return logger.traceExit(result);
     }
     catch (ClassCastException e) {
