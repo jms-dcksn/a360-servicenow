@@ -75,7 +75,13 @@ public class WatchIncident {
             @GreaterThan("29")
             @NumberInteger
             @NotEmpty
-                    Double interval) {
+                    Double interval,
+            @Idx(index = "9", type = AttributeType.NUMBER)
+            @Pkg(label = "System clock buffer", default_value = "0", default_value_type = DataType.NUMBER,
+                    description = "Intended to help accommodate slight differences in bot runner system clock vs ServiceNow timestamp")
+            @NumberInteger
+            @NotEmpty
+                    Double buffer) {
 
         lastRun = ZonedDateTime.now();
 
@@ -119,7 +125,7 @@ public class WatchIncident {
                 String sys_updated_on = (String) json_result.get("sys_updated_on");
                 ZonedDateTime dt2 = ZonedDateTime.parse(sys_updated_on,
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of(zone)));
-                if(dt2.isAfter(lastRun)){
+                if(dt2.isAfter(lastRun.minusSeconds(buffer.longValue()))){
                     String comment;
                     String description = json_result.get("short_description").toString();
                     String updated_by = json_result.get("sys_updated_by").toString();

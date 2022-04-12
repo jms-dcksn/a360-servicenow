@@ -152,10 +152,25 @@ public class IncidentTriggerTrigger implements Trigger3 {
       }
 
     }
+    if(parameters.containsKey("buffer") && parameters.get("buffer") != null && parameters.get("buffer").get() != null) {
+      convertedParameters.put("buffer", parameters.get("buffer").get());
+      if(convertedParameters.get("buffer") !=null && !(convertedParameters.get("buffer") instanceof Double)) {
+        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","buffer", "Double", parameters.get("buffer").get().getClass().getSimpleName()));
+      }
+    }
+    if(convertedParameters.get("buffer") == null) {
+      throw new TriggerException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","buffer"));
+    }
+    if(convertedParameters.containsKey("buffer")) {
+      if(convertedParameters.get("buffer")!=null && !(convertedParameters.get("buffer") instanceof Number)) {
+        throw new TriggerException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","buffer", "Number", convertedParameters.get("buffer").getClass().getSimpleName()));
+      }
+
+    }
     command.setConsumer(triggerListenerContext.getEventCallback());
     command.setTriggerUid(triggerListenerContext.getTriggerUid());
     try {
-      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("priority"),(Double)convertedParameters.get("interval"));}
+      command.startTrigger((String)convertedParameters.get("url"),(SecureString)convertedParameters.get("clientId"),(SecureString)convertedParameters.get("clientSecret"),(SecureString)convertedParameters.get("username"),(SecureString)convertedParameters.get("password"),(String)convertedParameters.get("priority"),(Double)convertedParameters.get("interval"),(Double)convertedParameters.get("buffer"));}
     catch (ClassCastException e) {
       throw new TriggerException(MESSAGES_GENERIC.getString("generic.IllegalParameters","startTrigger"));
     }

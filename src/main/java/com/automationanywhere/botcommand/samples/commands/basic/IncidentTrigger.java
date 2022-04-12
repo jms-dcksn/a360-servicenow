@@ -83,10 +83,13 @@ public class IncidentTrigger {
             @GreaterThan("29")
             @NumberInteger
             @NotEmpty
-                    Double interval) {
-
-        lastRun = ZonedDateTime.now();
-
+                    Double interval,
+            @Idx(index = "8", type = AttributeType.NUMBER)
+            @Pkg(label = "System clock buffer", default_value = "0", default_value_type = DataType.NUMBER,
+                    description = "Intended to help accommodate slight differences in bot runner system clock vs ServiceNow timestamp")
+            @NumberInteger
+            @NotEmpty
+                    Double buffer) {
         String ins_clientId = clientId.getInsecureString();
         String ins_clientSecret = clientSecret.getInsecureString();
         String ins_username = username.getInsecureString();
@@ -110,6 +113,7 @@ public class IncidentTrigger {
             public void run() {
                 String result = null;
                 try {
+                    lastRun = ZonedDateTime.now();
                     result = ServiceNowActions.triggerOnRecord(url, "incident", finalToken);
                 } catch (IOException e) {
                     throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);
@@ -132,7 +136,7 @@ public class IncidentTrigger {
                 String number = time.get("number").toString();
                 String description = time.get("short_description").toString();
                 String sys_id = time.get("sys_id").toString();
-                if(dt2.isAfter(lastRun) && incidentPriority <= intPriority){
+                if(dt2.isAfter(lastRun.minusSeconds(buffer.longValue())) && incidentPriority <= intPriority){
                     lastRun = dt2;
                     consumer.accept(getRecordValue(opened_at, number, description, sys_id, incidentPriority));
                     return;

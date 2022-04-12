@@ -15,20 +15,16 @@ import java.util.*;
 
 public class ServiceNowActions {
 
-    public static String getRecord(String url, String table, String sys_id, String token, List<Value> fields) throws IOException, ParseException {
-        url = url + "api/now/table/" + table + "/" + sys_id + "?sysparm_fields=";
-
-        if (fields != null && fields.size() > 0) {
-            for (Value element : fields) {
-                Map<String, Value> customValuesMap = ((DictionaryValue) element).get();
-                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue) customValuesMap.get("VALUE")).get();
-                if (!value.equals(null)) {
-                    url = url + value + "%2C";
-                }
+    public static String getRecord(String url, String token, String table, String sys_id, Map<String, StringValue> values) throws IOException, ParseException {
+        StringBuilder urlBuilder = new StringBuilder(url + "api/now/table/" + table + "/" + sys_id + "?sysparm_fields=");
+        for (Map.Entry<String,StringValue> entry : values.entrySet()) {
+                String value = String.valueOf(entry.getValue());
+                urlBuilder.append(value).append("%2C");
             }
-            //remove last comma
-            url = url.substring(0, url.length() - 3);
-        }
+        url = urlBuilder.toString();
+        //remove last comma
+        url = url.substring(0, url.length() - 3);
+        System.out.println(url);
         String method = "GET";
         String auth = "Bearer " + token;
         String response = "";
@@ -36,20 +32,16 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String getRecords(String url, String table, String token, List<Value> fields, String limit, String query) throws IOException, ParseException {
-        url = url + "api/now/table/" + table + "?sysparm_query=" + query + "&sysparm_fields=";
+    public static String getRecords(String url, String table, String token, Map<String, StringValue> values, String limit, String query) throws IOException, ParseException {
+        StringBuilder urlBuilder = new StringBuilder(url + "api/now/table/" + table + "?sysparm_query=" + query + "&sysparm_fields=");
         //add fields as query params
-        if (fields != null && fields.size() > 0) {
-            for (Value element : fields) {
-                Map<String, Value> customValuesMap = ((DictionaryValue) element).get();
-                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue) customValuesMap.get("VALUE")).get();
-                if (!value.equals(null)) {
-                    url = url + value + "%2C";
-                }
-            }
-            //remove last comma
-            url = url.substring(0, url.length() - 3);
+        for (Map.Entry<String,StringValue> entry : values.entrySet()) {
+            String value = String.valueOf(entry.getValue());
+            urlBuilder.append(value).append("%2C");
         }
+        url = urlBuilder.toString();
+        //remove last comma
+        url = url.substring(0, url.length() - 3);
         url = url + "&sysparm_limit=" + limit; //add record limit as query param
         String method = "GET";
         String auth = "Bearer " + token;
@@ -82,19 +74,13 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String insertRecord(String url, String table, String token, List<Value> fields) throws IOException, ParseException {
+    public static String insertRecord(String url, String table, String token, Map<String, StringValue> values) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "?sysparm_fields=sys_id";
         JSONObject jsonBody = new JSONObject();
 
-        if(fields!=null && fields.size()>0){
-            for (Value element : fields){
-                Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
-                String name = customValuesMap.containsKey("NAME") ? ((StringValue)customValuesMap.get("NAME")).get() : "";
-                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue)customValuesMap.get("VALUE")).get();
-                if(!value.equals(null)){
-                    jsonBody.put(name, value);
-                }
-            }
+        for (Map.Entry<String,StringValue> entry : values.entrySet()){
+            String currentValue = String.valueOf(entry.getValue().get());
+            jsonBody.put(entry.getKey(), currentValue);
         }
         String auth = "Bearer " + token;
         String response = "";
@@ -102,19 +88,13 @@ public class ServiceNowActions {
         return response;
     }
 
-    public static String modifyRecord(String url, String method, String table, String sys_id, String token, List<Value> fields) throws IOException, ParseException {
+    public static String modifyRecord(String url, String method, String table, String sys_id, String token, Map<String, StringValue> values) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id;
         JSONObject jsonBody = new JSONObject();
 
-        if(fields!=null && fields.size()>0){
-            for (Value element : fields){
-                Map<String, Value> customValuesMap = ((DictionaryValue)element).get();
-                String name = customValuesMap.containsKey("NAME") ? ((StringValue)customValuesMap.get("NAME")).get() : "";
-                String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue)customValuesMap.get("VALUE")).get();
-                if(!value.equals(null)){
-                    jsonBody.put(name, value);
-                }
-            }
+        for (Map.Entry<String,StringValue> entry : values.entrySet()){
+            String currentValue = String.valueOf(entry.getValue().get());
+            jsonBody.put(entry.getKey(), currentValue);
         }
         String auth = "Bearer " + token;
         String response = "";
@@ -125,20 +105,14 @@ public class ServiceNowActions {
 
     public static String updateRecord(String url, String token, String table, String sys_id, Map<String, StringValue> values) throws IOException, ParseException {
         url = url + "api/now/table/" + table + "/" + sys_id;
-
-        StringBuilder jsonBodyStr = new StringBuilder("{");
+        JSONObject jsonBody = new JSONObject();
         for (Map.Entry<String,StringValue> entry : values.entrySet()){
             String currentValue = String.valueOf(entry.getValue().get());
-            jsonBodyStr.append("\"").append(entry.getKey()).append("\": \"").append(currentValue).append("\",");
+            jsonBody.put(entry.getKey(), currentValue);
         }
-        jsonBodyStr = new StringBuilder(jsonBodyStr.substring(0, jsonBodyStr.length() - 1)); //remove last comma
-        jsonBodyStr.append("}");
-
-        //JSONObject jsonBody = new JSONObject();
-        //jsonBody.putAll(values);
         String auth = "Bearer " + token;
         String response = "";
-        response = HTTPRequest.httpPatch(url, auth, String.valueOf(jsonBodyStr));
+        response = HTTPRequest.httpPatch(url, auth, jsonBody.toString());
         return response;
     }
 
@@ -171,7 +145,6 @@ public class ServiceNowActions {
         String response = "";
 
         response = HTTPRequest.attachFile(url, auth, table, sys_id, filePath);
-
         return response;
     }
 
@@ -182,8 +155,6 @@ public class ServiceNowActions {
         String response = "";
 
         HTTPRequest.getFile(url, auth, filePath);
-
-
     }
 
     public static String deleteAttachment(String url, String token, String sys_id) throws IOException, ParseException {
@@ -193,8 +164,6 @@ public class ServiceNowActions {
         String response = "";
 
         response = HTTPRequest.Request(url, "DELETE", auth);
-
-
         return response;
     }
 }

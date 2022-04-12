@@ -50,9 +50,8 @@ public class UpdateRecord {
             @Idx(index = "3", type = TEXT) @Pkg(label = "Sys_Id", default_value_type = STRING)
             @NotEmpty String sys_id,
             @Idx(index = "4", type = DICTIONARY)
-            //Label you see at the top of the control
             @Pkg(label = "Values to update in record. Use this action to add updates to a record, such as comments.",
-                    description = "Ensure the dictionary value is wrapped in quotations. e.g. dictionary key: comments, dictionary value: \"Please try to reboot your computer.\" " +
+                    description = "e.g. dictionary key: comments, dictionary value: Please try to reboot your computer. " +
                             "Ensure the dictionary key matches a ServiceNow key from the Table API")
             //Header of the entry form
                     Map<String, StringValue> values
@@ -63,9 +62,7 @@ public class UpdateRecord {
         String response = "";
         JSONObject result = null;
         try {
-            Map<String, StringValue> values2;
-            values2 = values;
-            response = ServiceNowActions.updateRecord(url, token, table, sys_id, values2);
+            response = ServiceNowActions.updateRecord(url, token, table, sys_id, values);
             Object obj = new JSONParser().parse(response);
             JSONObject json_resp = (JSONObject) obj;
             result = (JSONObject) json_resp.get("result");

@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.automationanywhere.commandsdk.model.AttributeType.ENTRYLIST;
-import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
+import static com.automationanywhere.commandsdk.model.AttributeType.*;
 import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
 /**
@@ -65,21 +64,12 @@ public class ModifyRecord {
             @NotEmpty String table,
             @Idx(index = "3", type = TEXT) @Pkg(label = "Sys_Id", default_value_type = STRING)
             @NotEmpty String sys_id,
-            @Idx(index = "4", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "4.1", pkg = @Pkg(title = "NAME", label = "ServiceNow key")),
-                    @Idx.Option(index = "4.2", pkg = @Pkg(title = "VALUE", label = "Value")),
-            })
-            //Label you see at the top of the control
-            @Pkg(label = "Values to update in record", description = "e.g. key: short_description, value: my computer crashed")
-            //Header of the entry form
-            @EntryListLabel(value = "Provide entry")
-            //Button label which displays the entry form
-            @EntryListAddButtonLabel(value = "Add entry")
-            //Uniqueness rule for the column, this value is the TITLE of the column requiring uniqueness.
-            @EntryListEntryUnique(value = "NAME")
-            //Message to display in table when no entries are present.
-            @EntryListEmptyLabel(value = "No values to return")
-                    List<Value> values
+            @Idx(index = "4", type = DICTIONARY)
+            @Pkg(label = "Values to modify in record. Use this action to add updates to a record, such as comments.",
+                    description = "e.g. dictionary key: comments, dictionary value: Please try to reboot your computer. " +
+                            "Ensure the dictionary key matches a ServiceNow key from the Table API")
+                    //Header of the entry form
+                    Map<String, StringValue> values
     ) throws IOException, ParseException {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();

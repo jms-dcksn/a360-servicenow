@@ -54,42 +54,22 @@ public class GetRecords {
     @Sessions
     private Map<String, Object> sessionMap;
 
-    @Idx(index = "3.3", type = TEXT, name="NAME")
-    @Pkg(label = "Name", default_value_type = DataType.STRING)
-    @NotEmpty
-    private String name;
-
-    @Idx(index = "3.4", type = TEXT, name="VALUE")
-    @Pkg(label = "Value", default_value_type = DataType.STRING)
-    private String value;
-
     @Execute
     public ListValue<DictionaryValue> action(
             @Idx(index = "1", type = TEXT) @Pkg(label = "Session name", default_value_type = STRING, default_value = "Default")
             @NotEmpty String sessionName,
             @Idx(index = "2", type = TEXT) @Pkg(label = "Table", default_value_type = STRING)
             @NotEmpty String table,
-            @Idx(index = "3", type = ENTRYLIST, options = {
-                    @Idx.Option(index = "3.1", pkg = @Pkg(title = "NAME", label = "Dictionary variable key for output")),
-                    @Idx.Option(index = "3.2", pkg = @Pkg(title = "VALUE", label = "ServiceNow response key")),
-            })
-            //Label you see at the top of the control
-            @Pkg(label = "Values to Return for Each Dictionary in List",
-                    description = "The Output Dictionary Key specified above will be the key " +
-                            "used in the output Dictionary variable. The ServiceNow key needs to " +
-                            "be obtained from the API documentation for ServiceNow." +
-                            " e.g. Output Dictionary Key: 'description', value: 'short_description'" +
-                            " This will return the value at 'short_description' in the ServiceNow response" +
-                            " and write to the key 'description' in the output Dictionary variable")
-            //Header of the entry form
-            @EntryListLabel(value = "Provide entry")
-            //Button label which displays the entry form
-            @EntryListAddButtonLabel(value = "Add entry")
-            //Uniqueness rule for the column, this value is the TITLE of the column requiring uniqueness.
-            @EntryListEntryUnique(value = "NAME")
-            //Message to display in table when no entries are present.
-            @EntryListEmptyLabel(value = "No values to return")
-                    List<Value> values,
+            @Idx(index = "3", type = DICTIONARY)
+            @Pkg(label = "Values to return in output dictionary",
+                    description = "The keys contained in this input Dictionary variable will define the keys of each " +
+                            "output Dictionary variable inside the List. The values of this input should match a ServiceNow response " +
+                            "key. The ServiceNow keys can be found in the API documentation for ServiceNow. E.G. input " +
+                            "Dictionary key: description, value: short_description - this implies that the output Dictionary" +
+                            " will contain a key of 'description' and the associated value will be the ServiceNow response value for " +
+                            "key 'short_description'.")
+                    //Header of the entry form
+                    Map<String, StringValue> values,
             @Idx(index = "4", type = AttributeType.NUMBER) @Pkg(label = "Limit", default_value_type = DataType.NUMBER,
                     description = "Limits the total number of records returned")
             @GreaterThan("0")
@@ -103,8 +83,8 @@ public class GetRecords {
         SNOWServer snowServer = (SNOWServer) this.sessionMap.get(sessionName);
         String token = snowServer.getToken();
         String url = snowServer.getURL();
-        Integer iLimit = limit.intValue();
-        String sLimit = iLimit.toString();
+        int iLimit = limit.intValue();
+        String sLimit = Integer.toString(iLimit);
         String response = "";
         JSONArray resultArray;
         try {
@@ -122,14 +102,11 @@ public class GetRecords {
         for (int i=0; i<resultArray.size(); i++) {
             Map<String, Value> ResMap = new LinkedHashMap();
             JSONObject arrayElement = (JSONObject) resultArray.get(i);
-            if (values != null && values.size() > 0) {
-                for (Value element : values) {
-                    Map<String, Value> customValuesMap = ((DictionaryValue) element).get();
-                    String name = customValuesMap.containsKey("NAME") ? ((StringValue) customValuesMap.get("NAME")).get() : "";
-                    String value = (customValuesMap.getOrDefault("VALUE", null) == null) ? null : ((StringValue) customValuesMap.get("VALUE")).get();
+            if (values.size() > 0) {
+                for (Map.Entry<String,StringValue> entry : values.entrySet()){
                     try {
-                        ResMap.put(name, new StringValue(arrayElement.get(value).toString()));
-                    } catch (Exception e) {
+                        ResMap.put(entry.getKey(), new StringValue(arrayElement.get(String.valueOf(entry.getValue())).toString()));
+                    } catch (Exception e){
                         throw new BotCommandException("The ServiceNow record returned doesn't contain one of the keys entered in the values. Please check the values entered. " + e);
                     }
                 }

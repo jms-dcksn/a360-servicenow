@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.1.0-20220225-164937",
-    "codeVersion": "1.1.0-20220225-164937",
+    "packageVersion": "1.1.0-20220412-112451",
+    "codeVersion": "1.1.0-20220412-112451",
     "author": "",
     "commands": [
         {
@@ -338,7 +338,7 @@
             "returnSubtype": "UNDEFINED",
             "returnLabel": "Assign output to a dictionary variable",
             "returnRequired": false,
-            "returnDescription": "Output Dictionary keys are specified in the entry list",
+            "returnDescription": "Output Dictionary keys are specified with the input Dictionary keys",
             "attributes": [
                 {
                     "name": "sessionName",
@@ -377,53 +377,8 @@
                 {
                     "name": "values",
                     "label": "Values to return in dictionary",
-                    "description": "The Output Dictionary Key specified above will be the key used in the output Dictionary variable. The ServiceNow key needs to be obtained from the API documentation for ServiceNow. e.g. Output Dictionary Key: 'description', value: 'short_description' This will return the value at 'short_description' from the ServiceNow response and write to the key 'description' in the output Dictionary variable",
-                    "type": "ENTRYLIST",
-                    "rules": [
-                        {
-                            "name": "ENTRYLIST_ADD_LABEL",
-                            "value": "Add entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_EMPTY_LABEL",
-                            "value": "No values to return"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_LABEL",
-                            "value": "Provide entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_UNIQUE",
-                            "value": "NAME"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "name": "NAME",
-                            "label": "Dictionary variable key"
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "ServiceNow response key"
-                        }
-                    ],
-                    "attributes": [
-                        {
-                            "name": "NAME",
-                            "label": "Name",
-                            "type": "TEXT",
-                            "rules": [
-                                {
-                                    "name": "NOT_EMPTY"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value",
-                            "type": "TEXT"
-                        }
-                    ]
+                    "description": "The keys contained in this input Dictionary variable will define the keys of the output Dictionary variable. The values of this input should match a ServiceNow response key. The ServiceNow keys can be found in the API documentation for ServiceNow. E.G. input Dictionary key: description, value: short_description - this implies that the output Dictionary will contain a key of 'description' and the associated value will be the ServiceNow response value for key 'short_description'.",
+                    "type": "DICTIONARY"
                 }
             ]
         },
@@ -470,54 +425,9 @@
                 },
                 {
                     "name": "values",
-                    "label": "Values to Return for Each Dictionary in List",
-                    "description": "The Output Dictionary Key specified above will be the key used in the output Dictionary variable. The ServiceNow key needs to be obtained from the API documentation for ServiceNow. e.g. Output Dictionary Key: 'description', value: 'short_description' This will return the value at 'short_description' in the ServiceNow response and write to the key 'description' in the output Dictionary variable",
-                    "type": "ENTRYLIST",
-                    "rules": [
-                        {
-                            "name": "ENTRYLIST_ADD_LABEL",
-                            "value": "Add entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_EMPTY_LABEL",
-                            "value": "No values to return"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_LABEL",
-                            "value": "Provide entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_UNIQUE",
-                            "value": "NAME"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "name": "NAME",
-                            "label": "Dictionary variable key for output"
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "ServiceNow response key"
-                        }
-                    ],
-                    "attributes": [
-                        {
-                            "name": "NAME",
-                            "label": "Name",
-                            "type": "TEXT",
-                            "rules": [
-                                {
-                                    "name": "NOT_EMPTY"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value",
-                            "type": "TEXT"
-                        }
-                    ]
+                    "label": "Values to return in output dictionary",
+                    "description": "The keys contained in this input Dictionary variable will define the keys of each output Dictionary variable inside the List. The values of this input should match a ServiceNow response key. The ServiceNow keys can be found in the API documentation for ServiceNow. E.G. input Dictionary key: description, value: short_description - this implies that the output Dictionary will contain a key of 'description' and the associated value will be the ServiceNow response value for key 'short_description'.",
+                    "type": "DICTIONARY"
                 },
                 {
                     "name": "limit",
@@ -587,33 +497,10 @@
                     "name": "values",
                     "label": "Values to include in record",
                     "description": "e.g. key: short_description, value: my computer crashed",
-                    "type": "ENTRYLIST",
+                    "type": "DICTIONARY",
                     "rules": [
                         {
-                            "name": "ENTRYLIST_ADD_LABEL",
-                            "value": "Add entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_EMPTY_LABEL",
-                            "value": "No values to return"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_LABEL",
-                            "value": "Provide entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_UNIQUE",
-                            "value": "NAME"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "name": "NAME",
-                            "label": "ServiceNow key"
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value"
+                            "name": "NOT_EMPTY"
                         }
                     ],
                     "attributes": [
@@ -689,37 +576,9 @@
                 },
                 {
                     "name": "values",
-                    "label": "Values to update in record",
-                    "description": "e.g. key: short_description, value: my computer crashed",
-                    "type": "ENTRYLIST",
-                    "rules": [
-                        {
-                            "name": "ENTRYLIST_ADD_LABEL",
-                            "value": "Add entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_EMPTY_LABEL",
-                            "value": "No values to return"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_LABEL",
-                            "value": "Provide entry"
-                        },
-                        {
-                            "name": "ENTRYLIST_ENTRY_UNIQUE",
-                            "value": "NAME"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "name": "NAME",
-                            "label": "ServiceNow key"
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value"
-                        }
-                    ],
+                    "label": "Values to modify in record. Use this action to add updates to a record, such as comments.",
+                    "description": "e.g. dictionary key: comments, dictionary value: Please try to reboot your computer. Ensure the dictionary key matches a ServiceNow key from the Table API",
+                    "type": "DICTIONARY",
                     "attributes": [
                         {
                             "name": "NAME",
@@ -794,7 +653,7 @@
                 {
                     "name": "values",
                     "label": "Values to update in record. Use this action to add updates to a record, such as comments.",
-                    "description": "Ensure the dictionary value is wrapped in quotations. e.g. dictionary key: comments, dictionary value: \"Please try to reboot your computer.\" Ensure the dictionary key matches a ServiceNow key from the Table API",
+                    "description": "e.g. dictionary key: comments, dictionary value: Please try to reboot your computer. Ensure the dictionary key matches a ServiceNow key from the Table API",
                     "type": "DICTIONARY"
                 }
             ]
@@ -924,6 +783,24 @@
                             "name": "NUMBER_INTEGER"
                         }
                     ]
+                },
+                {
+                    "name": "buffer",
+                    "label": "System clock buffer",
+                    "description": "Intended to help accommodate slight differences in bot runner system clock vs ServiceNow timestamp",
+                    "type": "NUMBER",
+                    "defaultValue": {
+                        "number": "0",
+                        "type": "NUMBER"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
+                        },
+                        {
+                            "name": "NUMBER_INTEGER"
+                        }
+                    ]
                 }
             ]
         },
@@ -1033,6 +910,24 @@
                         {
                             "name": "GREATER_THAN",
                             "value": "29"
+                        },
+                        {
+                            "name": "NUMBER_INTEGER"
+                        }
+                    ]
+                },
+                {
+                    "name": "buffer",
+                    "label": "System clock buffer",
+                    "description": "Intended to help accommodate slight differences in bot runner system clock vs ServiceNow timestamp",
+                    "type": "NUMBER",
+                    "defaultValue": {
+                        "number": "0",
+                        "type": "NUMBER"
+                    },
+                    "rules": [
+                        {
+                            "name": "NOT_EMPTY"
                         },
                         {
                             "name": "NUMBER_INTEGER"
