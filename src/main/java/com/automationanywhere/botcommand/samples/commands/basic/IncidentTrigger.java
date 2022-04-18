@@ -90,6 +90,7 @@ public class IncidentTrigger {
             @NumberInteger
             @NotEmpty
                     Double buffer) {
+        lastRun = ZonedDateTime.now();
         String ins_clientId = clientId.getInsecureString();
         String ins_clientSecret = clientSecret.getInsecureString();
         String ins_username = username.getInsecureString();
@@ -113,7 +114,7 @@ public class IncidentTrigger {
             public void run() {
                 String result = null;
                 try {
-                    lastRun = ZonedDateTime.now();
+
                     result = ServiceNowActions.triggerOnRecord(url, "incident", finalToken);
                 } catch (IOException e) {
                     throw new BotCommandException("An unexpected response was received from ServiceNow. Please check your credentials and ensure your instance as awake. Exception message: " + e);

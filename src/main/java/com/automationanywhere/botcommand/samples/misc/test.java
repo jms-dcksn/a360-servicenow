@@ -28,21 +28,21 @@ public class test {
         //String usernameColonPassword = "admin:AYdIg7w1dXKv";
         //String basicAuthPayload = "Basic " + Base64.getEncoder().encodeToString(usernameColonPassword.getBytes());
         List<Value> list = new ArrayList<>();
-        String url = "https://dev103260.service-now.com/";
-        String clientId = "93430bfe3b750110cdb899870a901337";
-        String clientSecret = "FBb6p`,L6}";
+        String url = "https://dev81802.service-now.com/";
+        String clientId = "f28208fa5da20110a05403084e712302";
+        String clientSecret = "xTBR{zg}ky";
         String username = "admin";
-        String password = "8rsZoMb1GkUU";
+        String password = "Qvk3E!cCh=8Z";
         String table = "incident";
         String name = "opened";
         String value = "opened_at";
-        String sys_id = "e329de99731423002728660c4cf6a73c";
+        String sys_id = "ed92e8d173d023002728660c4cf6a7bc";
         String folderPath = "C:\\Users\\jamesdickson\\Pictures\\";
         //Double limit = 5.0;
         //Integer iLimit = limit.intValue();
         //String sLimit = iLimit.toString();
         Map<String, StringValue> values = new HashMap<>();
-        values.put("description", new StringValue("short_description"));
+        values.put("short_description", new StringValue("IntellijTest"));
         //values.put("comments", new StringValue("This is a new comment 2"));
         //values.put("urgency", "2");
 
@@ -63,7 +63,7 @@ public class test {
         JSONObject details = (JSONObject) obj;
         String token = (String) details.get("access_token");
         String errorMessage = "";
-        //System.out.println(token);
+
 
         String triggerResp = ServiceNowActions.triggerOnRecord(url, "incident", token);
         System.out.println(triggerResp);
@@ -76,7 +76,7 @@ public class test {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")));
         System.out.println("Now: "+ ZonedDateTime.now());
         System.out.println("incident creation: "+dt2);
-        System.out.println(dt2.isAfter(ZonedDateTime.now().minusSeconds(15)));
+        System.out.println(dt2.isAfter(ZonedDateTime.now().minusSeconds(20)));
 //
 //        String respUpdate = ServiceNowActions.getRecord(url, token, table, sys_id, values);
 //        JSONObject result;

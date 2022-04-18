@@ -48,15 +48,6 @@ public class InsertRecord {
     @Sessions
     private Map<String, Object> sessionMap;
 
-    @Idx(index = "3.3", type = TEXT, name="NAME")
-    @Pkg(label = "Name", default_value_type = DataType.STRING)
-    @NotEmpty
-    private String name;
-
-    @Idx(index = "3.4", type = TEXT, name="VALUE")
-    @Pkg(label = "Value", default_value_type = DataType.STRING)
-    private String value;
-
     @Execute
     public StringValue action(
             @Idx(index = "1", type = TEXT) @Pkg(label = "Session name", default_value_type = STRING, default_value = "Default")

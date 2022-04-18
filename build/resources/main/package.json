@@ -4,8 +4,8 @@
     "description": "[[description]]",
     "group": "com.automationanywhere",
     "artifactName": "ServiceNow",
-    "packageVersion": "1.1.0-20220412-112451",
-    "codeVersion": "1.1.0-20220412-112451",
+    "packageVersion": "1.1.0-20220413-154147",
+    "codeVersion": "1.1.0-20220413-154147",
     "author": "",
     "commands": [
         {
@@ -502,23 +502,6 @@
                         {
                             "name": "NOT_EMPTY"
                         }
-                    ],
-                    "attributes": [
-                        {
-                            "name": "NAME",
-                            "label": "Name",
-                            "type": "TEXT",
-                            "rules": [
-                                {
-                                    "name": "NOT_EMPTY"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value",
-                            "type": "TEXT"
-                        }
                     ]
                 }
             ]
@@ -578,24 +561,7 @@
                     "name": "values",
                     "label": "Values to modify in record. Use this action to add updates to a record, such as comments.",
                     "description": "e.g. dictionary key: comments, dictionary value: Please try to reboot your computer. Ensure the dictionary key matches a ServiceNow key from the Table API",
-                    "type": "DICTIONARY",
-                    "attributes": [
-                        {
-                            "name": "NAME",
-                            "label": "Name",
-                            "type": "TEXT",
-                            "rules": [
-                                {
-                                    "name": "NOT_EMPTY"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "VALUE",
-                            "label": "Value",
-                            "type": "TEXT"
-                        }
-                    ]
+                    "type": "DICTIONARY"
                 }
             ]
         },

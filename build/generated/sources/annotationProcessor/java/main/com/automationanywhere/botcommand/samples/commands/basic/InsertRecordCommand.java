@@ -64,23 +64,6 @@ public final class InsertRecordCommand implements BotCommand {
     if(convertedParameters.get("values") == null) {
       throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","values"));
     }
-    if(parameters.containsKey("NAME") && parameters.get("NAME") != null && parameters.get("NAME").get() != null) {
-      convertedParameters.put("NAME", parameters.get("NAME").get());
-      if(convertedParameters.get("NAME") !=null && !(convertedParameters.get("NAME") instanceof String)) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","NAME", "String", parameters.get("NAME").get().getClass().getSimpleName()));
-      }
-    }
-    if(convertedParameters.get("NAME") == null) {
-      throw new BotCommandException(MESSAGES_GENERIC.getString("generic.validation.notEmpty","NAME"));
-    }
-
-    if(parameters.containsKey("VALUE") && parameters.get("VALUE") != null && parameters.get("VALUE").get() != null) {
-      convertedParameters.put("VALUE", parameters.get("VALUE").get());
-      if(convertedParameters.get("VALUE") !=null && !(convertedParameters.get("VALUE") instanceof String)) {
-        throw new BotCommandException(MESSAGES_GENERIC.getString("generic.UnexpectedTypeReceived","VALUE", "String", parameters.get("VALUE").get().getClass().getSimpleName()));
-      }
-    }
-
 
     command.setSessionMap(sessionMap);
     try {
